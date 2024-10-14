@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { BookTitle, BookTitleDocument } from 'schemas/book-title.schema';
+import { BookTitle, BookTitleDocument } from 'modules/book-title/book-title.schema';
 
 @Injectable()
-export class BookTitleService {
+export class BookTitleRepository {
   constructor(@InjectModel(BookTitle.name) private bookTitleModel: Model<BookTitleDocument>) {}
 
   async findAll(): Promise<BookTitle[]> {
@@ -19,4 +19,5 @@ export class BookTitleService {
   async findById(id: string): Promise<BookTitle> {
     return this.bookTitleModel.findById(id).exec();
   }
+  
 }

@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { BorrowRecord, BorrowRecordDocument } from 'schemas/borrow-record.schema';
+import { BorrowRecord, BorrowRecordDocument } from './borrow-record.schema';
 
 @Injectable()
-export class BorrowRecordService {
+export class BorrowRecordRepository {
   constructor(@InjectModel(BorrowRecord.name) private borrowRecordModel: Model<BorrowRecordDocument>) {}
 
   async findAll(): Promise<BorrowRecord[]> {
