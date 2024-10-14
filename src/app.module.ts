@@ -3,6 +3,7 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { MongooseModule } from "@nestjs/mongoose";
 import { SettingModule } from "modules/setting/setting.module";
+import { BookModule } from "modules/book/book.module";
 
 @Module({
   imports: [
@@ -11,7 +12,8 @@ import { SettingModule } from "modules/setting/setting.module";
       dbName: 'library',
       pass: '123456',
     }),
-    SettingModule
+    SettingModule,
+    BookModule
   ],
   providers: [AppService],
   controllers: [AppController]

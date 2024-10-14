@@ -7,5 +7,9 @@ import { BookRepository } from './book.repository';
 export class BookService {
   constructor(private readonly bookRepository: BookRepository) {}
 
+  async findAll() {
+    return this.bookRepository.findAll();
+  }
+
 
 }
