@@ -19,4 +19,8 @@ export class CategoryRepository {
   async findById(id: string): Promise<Category> {
     return this.categoryModel.findById(id).exec();
   }
+
+  async findByTitle(title: string): Promise<Category> {
+    return this.categoryModel.findOne({ title }).exec();
+  }
 }

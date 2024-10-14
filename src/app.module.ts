@@ -4,6 +4,7 @@ import { AppService } from "./app.service";
 import { MongooseModule } from "@nestjs/mongoose";
 import { SettingModule } from "modules/setting/setting.module";
 import { BookModule } from "modules/book/book.module";
+import { CategoryModule } from "modules/category/category.module";
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { BookModule } from "modules/book/book.module";
       pass: '123456',
     }),
     SettingModule,
-    BookModule
+    BookModule,
+    CategoryModule
   ],
   providers: [AppService],
   controllers: [AppController]
