@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Membership, MembershipDocument } from 'schemas/membership.schema';
+import { Membership, MembershipDocument } from './membership.schema';
 
 @Injectable()
-export class MembershipService {
+export class MembershipRepository {
   constructor(@InjectModel(Membership.name) private membershipModel: Model<MembershipDocument>) {}
 
   async findAll(): Promise<Membership[]> {

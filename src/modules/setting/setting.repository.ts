@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Setting, SettingDocument } from 'schemas/setting.schema';
+import { Setting, SettingDocument } from './setting.schema';
 
 @Injectable()
-export class SettingService {
+export class SettingRepository {
   constructor(@InjectModel(Setting.name) private settingModel: Model<SettingDocument>) {}
 
   async findAll(): Promise<Setting[]> {

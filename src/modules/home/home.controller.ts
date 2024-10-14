@@ -1,5 +1,4 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
-import { UserService } from 'services/user.service';
 
 @Controller('home')
 export class HomeController {

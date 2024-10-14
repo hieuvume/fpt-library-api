@@ -2522,6 +2522,19 @@ forwarded@0.2.0:
   resolved "https://registry.npmjs.org/forwarded/-/forwarded-0.2.0.tgz"
   integrity sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==
 
+"fpt-library-api@file:":
+  version "0.0.1"
+  resolved "file:"
+  dependencies:
+    "@nestjs/common" "^10.0.0"
+    "@nestjs/core" "^10.0.0"
+    "@nestjs/mongoose" "^10.0.10"
+    "@nestjs/platform-express" "^10.0.0"
+    fpt-library-api "file:"
+    mongoose "^8.7.1"
+    reflect-metadata "^0.2.0"
+    rxjs "^7.8.1"
+
 fresh@0.5.2:
   version "0.5.2"
   resolved "https://registry.npmjs.org/fresh/-/fresh-0.5.2.tgz"
