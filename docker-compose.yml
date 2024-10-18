@@ -14,7 +14,7 @@ services:
       - ./.docker/entrypoint:/docker-entrypoint-initdb.d
       - mongoData:/data/db
       - mongoConfig:/data/configdb
-    command: --wiredTigerCacheSizeGB 1.5
+    command: --wiredTigerCacheSizeGB 1.5 --bind_ip_all
 
 volumes:
   mongoData:

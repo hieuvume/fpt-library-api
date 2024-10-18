@@ -1,18 +1,18 @@
 import {
-  BadRequestException,
   Injectable,
-  UnauthorizedException,
+  UnauthorizedException
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt"; // Sử dụng nếu bạn dùng JWT
 import * as bcrypt from "bcryptjs";
 import { UserRepository } from "modules/user/user.repository";
+import { badMessage } from "utils/helpers";
 
 @Injectable()
 export class AuthService {
   constructor(
     private userRepository: UserRepository,
-    private jwtService: JwtService
-  ) {}
+    private jwtService: JwtService,
+  ) { }
 
   async signUp(
     email: string,
@@ -22,9 +22,7 @@ export class AuthService {
   ) {
     const userExists = await this.userRepository.findOneByEmail(email);
     if (userExists) {
-      throw new BadRequestException({
-        message: ["Email is already exists"],
-      });
+      return badMessage("email", "Email is already exists");
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await this.userRepository.create({
@@ -45,15 +43,11 @@ export class AuthService {
   async signIn(email: string, password: string) {
     const user = await this.userRepository.findOneByEmail(email);
     if (!user) {
-      throw new BadRequestException({
-        message: ["Email or password is not correct"],
-      });
+      return badMessage("password", "Email or password is not correct");
     }
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
-      throw new BadRequestException({
-        message: ["Email or password is not correct"],
-      });
+      return badMessage("password", "Email or password is not correct");
     }
 
     const payload = { sub: user._id, email: user.email, id: user._id };
