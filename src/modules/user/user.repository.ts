@@ -11,12 +11,18 @@ export class UserRepository {
     return this.userModel.find().exec();
   }
 
-  async create(data: any): Promise<User> {
+  async findById(id: string): Promise<User> {
+    return this.userModel.findById(id).exec();
+  }
+
+  async findOneByEmail(email: string): Promise<User | null> {
+    return this.userModel.findOne({ email }).exec();
+  }
+
+  async create(data: { email: string; password: string; full_name: string; phone_number: string }): Promise<User> {
     const newUser = new this.userModel(data);
     return newUser.save();
   }
 
-  async findById(id: string): Promise<User> {
-    return this.userModel.findById(id).exec();
-  }
+  
 }

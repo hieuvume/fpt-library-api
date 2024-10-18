@@ -1,18 +1,20 @@
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
-import { Document, Types } from "mongoose";
+import { Transform } from "class-transformer";
+import { Document, ObjectId, Types } from "mongoose";
 
 export type UserDocument = User & Document;
 
 @Schema()
 export class User {
-  @Prop({ required: true })
-  username: string;
 
-  @Prop({ required: true })
-  password: string;
+  @Transform(({ value }) => value.toString())
+  _id: ObjectId;
 
   @Prop({ required: true, unique: true })
   email: string;
+
+  @Prop({ required: true })
+  password: string;
 
   @Prop({ required: true })
   full_name: string;
@@ -48,4 +50,6 @@ export class User {
   updated_at: Date;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+const UserSchema = SchemaFactory.createForClass(User);
+
+export { UserSchema };
