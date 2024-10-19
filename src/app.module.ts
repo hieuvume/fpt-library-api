@@ -1,21 +1,19 @@
 import { Module } from "@nestjs/common";
-import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
+import { ConfigModule } from "@nestjs/config";
 import { MongooseModule } from "@nestjs/mongoose";
-import { SettingModule } from "modules/setting/setting.module";
+import { MailModule } from "mail/mail.module";
+import { AuthModule } from "modules/auth/auth.module";
 import { BookModule } from "modules/book/book.module";
 import { CategoryModule } from "modules/category/category.module";
-import { AuthModule } from "modules/auth/auth.module";
-import { UserModule } from "modules/user/user.module";
-import { MailerModule } from '@nestjs-modules/mailer';
-import { join } from 'path'; // For email templates
-import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter'; // Optional for template engines
-import { MailModule } from "mail/mail.module";
-import { ConfigModule } from "@nestjs/config";
 import { ResetPasswordModule } from "modules/reset-password/reset-password.module";
 import { RoleModule } from "modules/role/role.module";
-import { APP_GUARD } from "@nestjs/core";
-import { RolesGuard } from "modules/role/guards/roles.guard";
+import { SettingModule } from "modules/setting/setting.module";
+import { UserModule } from "modules/user/user.module";
+import { AppController } from "./app.controller";
+import { AppService } from "./app.service";
+import { BookTitleSeeder } from "modules/book-title/book-title.seeder";
+import { BookSeeder } from "modules/book/book.seeder";
+import { CategorySeeder } from "modules/category/category.seeder";
 
 @Module({
   imports: [
@@ -34,14 +32,13 @@ import { RolesGuard } from "modules/role/guards/roles.guard";
     UserModule,
     AuthModule,
     ResetPasswordModule,
-    RoleModule
+    RoleModule,
   ],
   providers: [
     AppService,
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: RolesGuard,
-    // },
+    BookTitleSeeder,
+    BookSeeder,
+    CategorySeeder
   ],
   controllers: [AppController]
 })
