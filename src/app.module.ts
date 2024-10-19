@@ -36,9 +36,6 @@ import { CategorySeeder } from "modules/category/category.seeder";
   ],
   providers: [
     AppService,
-    BookTitleSeeder,
-    BookSeeder,
-    CategorySeeder
   ],
   controllers: [AppController]
 })
