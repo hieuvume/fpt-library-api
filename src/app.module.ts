@@ -13,6 +13,9 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { MailModule } from "mail/mail.module";
 import { ConfigModule } from "@nestjs/config";
 import { ResetPasswordModule } from "modules/reset-password/reset-password.module";
+import { RoleModule } from "modules/role/role.module";
+import { APP_GUARD } from "@nestjs/core";
+import { RolesGuard } from "modules/role/guards/roles.guard";
 
 @Module({
   imports: [
@@ -30,9 +33,16 @@ import { ResetPasswordModule } from "modules/reset-password/reset-password.modul
     CategoryModule,
     UserModule,
     AuthModule,
-    ResetPasswordModule
+    ResetPasswordModule,
+    RoleModule
   ],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
   controllers: [AppController]
 })
 export class AppModule { }

@@ -4,6 +4,7 @@ import {
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt"; // Sử dụng nếu bạn dùng JWT
 import * as bcrypt from "bcryptjs";
+import { RoleRepository } from "modules/role/role.repository";
 import { UserRepository } from "modules/user/user.repository";
 import { badMessage } from "utils/helpers";
 
@@ -11,6 +12,7 @@ import { badMessage } from "utils/helpers";
 export class AuthService {
   constructor(
     private userRepository: UserRepository,
+    private roleRepository: RoleRepository,
     private jwtService: JwtService,
   ) { }
 
@@ -25,14 +27,18 @@ export class AuthService {
       return badMessage("email", "Email is already exists");
     }
     const hashedPassword = await bcrypt.hash(password, 10);
+
+    const userRole = await this.roleRepository.findByName("USER");
+
     const newUser = await this.userRepository.create({
       email,
       password: hashedPassword,
       full_name,
       phone_number,
+      role: userRole,
     });
 
-    const payload = { sub: newUser._id, email: newUser.email, id: newUser._id };
+    const payload = { sub: newUser._id, email: newUser.email, id: newUser._id, role: newUser.role.role_name };
     const accessToken = await this.jwtService.signAsync(payload);
     return {
       access_token: accessToken,
@@ -67,22 +73,23 @@ export class AuthService {
   }
 
   async signInViaGoogle(googleUser: any) {
-    const { email, full_name } = googleUser;
+    const { email, name } = googleUser;
 
-    // Kiểm tra xem người dùng đã tồn tại trong hệ thống chưa
     let user = await this.userRepository.findOneByEmail(email);
 
     if (!user) {
-      // Nếu người dùng chưa tồn tại, tạo mới người dùng
+      const userRole = await this.roleRepository.findByName("USER");
       user = await this.userRepository.create({
         email,
-        full_name,
-        password: null,  // Không cần mật khẩu cho người dùng Google
-        phone_number: '',  // Không cần số điện thoại cho người dùng Google
+        full_name: name,
+        password: null,
+        phone_number: null,
+        role: userRole,
       });
     }
 
-    const payload = { sub: user._id, email: user.email, id: user._id };
+
+    const payload = { sub: user._id, email: user.email, id: user._id, role: user.role.role_name };
     const accessToken = await this.jwtService.signAsync(payload);
 
     return {

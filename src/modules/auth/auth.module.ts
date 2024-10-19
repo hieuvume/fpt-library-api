@@ -5,17 +5,19 @@ import { UserModule } from "../user/user.module"; // Import UserModule
 import { JwtModule } from "@nestjs/jwt";
 import { jwtConstants } from "./constants";
 import { MailService } from "mail/mail.service";
+import { GoogleStrategy } from "./strategies/auth.strategies";
+import { RoleModule } from "modules/role/role.module";
 
 @Module({
   imports: [
-    UserModule,
+    RoleModule,
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
       signOptions: { expiresIn: "900s" },
     }),
   ],
-  providers: [AuthService],
   controllers: [AuthController],
+  providers: [AuthService, GoogleStrategy],
 })
 export class AuthModule {}

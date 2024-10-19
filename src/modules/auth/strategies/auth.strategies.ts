@@ -1,27 +1,37 @@
-import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';  
+import { configDotenv } from 'dotenv';
 import { Strategy, VerifyCallback } from 'passport-google-oauth20';
+
+configDotenv();
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor() {
     super({
-      clientID: 'GOOGLE_CLIENT_ID',  // Thay bằng Client ID từ Google Cloud
-      clientSecret: 'GOOGLE_CLIENT_SECRET',  // Thay bằng Client Secret từ Google Cloud
-      callbackURL: 'http://localhost:3000/auth/google/callback',  // URL callback sau khi đăng nhập
-      scope: ['email', 'profile'],  // Lấy thông tin email và profile
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: process.env.CALLBACK_URL,
+      scope: ['profile', 'email'],
     });
   }
 
-  async validate(accessToken: string, refreshToken: string, profile: any, done: VerifyCallback): Promise<any> {
-    const { name, emails, photos } = profile;
+  async validate(
+    _accessToken: string,
+    _refreshToken: string,
+    profile: any,
+    done: VerifyCallback,
+  ): Promise<any> {
+    const { id, name, emails, photos } = profile;
 
     const user = {
+      provider: 'google',
+      providerId: id,
       email: emails[0].value,
-      full_name: `${name.givenName} ${name.familyName}`,
+      name: `${name.givenName} ${name.familyName}`,
       picture: photos[0].value,
-      accessToken,
     };
+
     done(null, user);
   }
 }

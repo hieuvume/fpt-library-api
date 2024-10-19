@@ -345,51 +345,6 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
-"@css-inline/css-inline-android-arm-eabi@0.14.1":
-  version "0.14.1"
-  resolved "https://registry.npmjs.org/@css-inline/css-inline-android-arm-eabi/-/css-inline-android-arm-eabi-0.14.1.tgz"
-  integrity sha512-LNUR8TY4ldfYi0mi/d4UNuHJ+3o8yLQH9r2Nt6i4qeg1i7xswfL3n/LDLRXvGjBYqeEYNlhlBQzbPwMX1qrU6A==
-
-"@css-inline/css-inline-android-arm64@0.14.1":
-  version "0.14.1"
-  resolved "https://registry.npmjs.org/@css-inline/css-inline-android-arm64/-/css-inline-android-arm64-0.14.1.tgz"
-  integrity sha512-tH5us0NYGoTNBHOUHVV7j9KfJ4DtFOeTLA3cM0XNoMtArNu2pmaaBMFJPqECzavfXkLc7x5Z22UPZYjoyHfvCA==
-
-"@css-inline/css-inline-darwin-arm64@0.14.1":
-  version "0.14.1"
-  resolved "https://registry.npmjs.org/@css-inline/css-inline-darwin-arm64/-/css-inline-darwin-arm64-0.14.1.tgz"
-  integrity sha512-QE5W1YRIfRayFrtrcK/wqEaxNaqLULPI0gZB4ArbFRd3d56IycvgBasDTHPre5qL2cXCO3VyPx+80XyHOaVkag==
-
-"@css-inline/css-inline-darwin-x64@0.14.1":
-  version "0.14.1"
-  resolved "https://registry.npmjs.org/@css-inline/css-inline-darwin-x64/-/css-inline-darwin-x64-0.14.1.tgz"
-  integrity sha512-mAvv2sN8awNFsbvBzlFkZPbCNZ6GCWY5/YcIz7V5dPYw+bHHRbjnlkNTEZq5BsDxErVrMIGvz05PGgzuNvZvdQ==
-
-"@css-inline/css-inline-linux-arm-gnueabihf@0.14.1":
-  version "0.14.1"
-  resolved "https://registry.npmjs.org/@css-inline/css-inline-linux-arm-gnueabihf/-/css-inline-linux-arm-gnueabihf-0.14.1.tgz"
-  integrity sha512-AWC44xL0X7BgKvrWEqfSqkT2tJA5kwSGrAGT+m0gt11wnTYySvQ6YpX0fTY9i3ppYGu4bEdXFjyK2uY1DTQMHA==
-
-"@css-inline/css-inline-linux-arm64-gnu@0.14.1":
-  version "0.14.1"
-  resolved "https://registry.npmjs.org/@css-inline/css-inline-linux-arm64-gnu/-/css-inline-linux-arm64-gnu-0.14.1.tgz"
-  integrity sha512-drj0ciiJgdP3xKXvNAt4W+FH4KKMs8vB5iKLJ3HcH07sNZj58Sx++2GxFRS1el3p+GFp9OoYA6dgouJsGEqt0Q==
-
-"@css-inline/css-inline-linux-arm64-musl@0.14.1":
-  version "0.14.1"
-  resolved "https://registry.npmjs.org/@css-inline/css-inline-linux-arm64-musl/-/css-inline-linux-arm64-musl-0.14.1.tgz"
-  integrity sha512-FzknI+st8eA8YQSdEJU9ykcM0LZjjigBuynVF5/p7hiMm9OMP8aNhWbhZ8LKJpKbZrQsxSGS4g9Vnr6n6FiSdQ==
-
-"@css-inline/css-inline-linux-x64-gnu@0.14.1":
-  version "0.14.1"
-  resolved "https://registry.npmjs.org/@css-inline/css-inline-linux-x64-gnu/-/css-inline-linux-x64-gnu-0.14.1.tgz"
-  integrity sha512-yubbEye+daDY/4vXnyASAxH88s256pPati1DfVoZpU1V0+KP0BZ1dByZOU1ktExurbPH3gZOWisAnBE9xon0Uw==
-
-"@css-inline/css-inline-linux-x64-musl@0.14.1":
-  version "0.14.1"
-  resolved "https://registry.npmjs.org/@css-inline/css-inline-linux-x64-musl/-/css-inline-linux-x64-musl-0.14.1.tgz"
-  integrity sha512-6CRAZzoy1dMLPC/tns2rTt1ZwPo0nL/jYBEIAsYTCWhfAnNnpoLKVh5Nm+fSU3OOwTTqU87UkGrFJhObD/wobQ==
-
 "@css-inline/css-inline-win32-x64-msvc@0.14.1":
   version "0.14.1"
   resolved "https://registry.npmjs.org/@css-inline/css-inline-win32-x64-msvc/-/css-inline-win32-x64-msvc-0.14.1.tgz"
@@ -442,6 +397,11 @@
   version "8.57.1"
   resolved "https://registry.npmjs.org/@eslint/js/-/js-8.57.1.tgz"
   integrity sha512-d9zaMRSTIKDLhctzH12MtXvJKSSUhaHcjV+2Z+GK+EEY7XKpP5yR4x+N3TAcHTcu963nIr+TMcCb4DBCYX1z6Q==
+
+"@faker-js/faker@^8.0.0", "@faker-js/faker@^8.4.1":
+  version "8.4.1"
+  resolved "https://registry.npmjs.org/@faker-js/faker/-/faker-8.4.1.tgz"
+  integrity sha512-XQ3cU+Q8Uqmrbf2e0cIC/QN43sTBSC8KF12u29Mb47tWrt2hAgBXSgpZMj4Ao8Uk0iJcU99QsOCaIL8934obCg==
 
 "@humanwhocodes/config-array@^0.13.0":
   version "0.13.0"
@@ -3106,11 +3066,6 @@ fs.realpath@^1.0.0:
   resolved "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
   integrity sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==
 
-fsevents@^2.3.2, fsevents@~2.3.2:
-  version "2.3.3"
-  resolved "https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz"
-  integrity sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==
-
 function-bind@^1.1.2:
   version "1.1.2"
   resolved "https://registry.npmjs.org/function-bind/-/function-bind-1.1.2.tgz"
@@ -5026,6 +4981,11 @@ neo-async@^2.6.2:
   version "2.6.2"
   resolved "https://registry.npmjs.org/neo-async/-/neo-async-2.6.2.tgz"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
+
+nestjs-seeder@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.npmjs.org/nestjs-seeder/-/nestjs-seeder-0.3.2.tgz"
+  integrity sha512-dCuxmhWdjgAn1HT0K7ExuCmKQc7HCGihFgzYF4keVJkR94d+diVQQg9/K1aQFnBkH9XVuugUqi4OClfwt09XVQ==
 
 nice-try@^1.0.4:
   version "1.0.5"

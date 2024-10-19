@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.3",
@@ -33,6 +34,7 @@
     "class-validator": "^0.14.1",
     "fpt-library-api": "file:",
     "mongoose": "^8.7.1",
+    "nestjs-seeder": "^0.3.2",
     "nodemailer": "^6.9.15",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
