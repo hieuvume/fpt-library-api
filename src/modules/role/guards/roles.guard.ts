@@ -11,26 +11,33 @@ export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector, private userRepository: UserRepository, private jwtService: JwtService) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    console.log('role guard');
     const requiredRoles = this.reflector.get<string[]>(ROLES_KEY, context.getHandler());
-
-    if (!requiredRoles) {
-      return true;
-    }
 
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
     if (!token) {
       throw new UnauthorizedException();
     }
-    const payload = await this.jwtService.verifyAsync(
-      token,
-      {
-        secret: jwtConstants.secret
-      }
-    );
-    const user = await this.userRepository.findById(payload.sub);
+    let user = null;
+    try {
+      const payload = await this.jwtService.verifyAsync(
+        token,
+        {
+          secret: jwtConstants.secret
+        }
+      );
+      user = await this.userRepository.findById(payload.sub);
+    } catch (error) {
+      throw new UnauthorizedException();
+    }
+    
     if (!user) {
       throw new UnauthorizedException();
+    }
+
+    if (!requiredRoles) {
+      return true;
     }
 
     if (!user.role) {

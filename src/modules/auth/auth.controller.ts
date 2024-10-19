@@ -7,14 +7,11 @@ import {
   Res,
   UseGuards
 } from "@nestjs/common";
-import { AuthGuard } from "./guards/auth.guard";
 import { AuthService } from "./auth.service";
 import { SignInDto } from "./dto/sign-in.dto";
 import { SignUpDto } from "./dto/sign-up.dto";
+import { AuthGuard } from "./guards/auth.guard";
 import { GoogleOauthGuard } from "./guards/google-oauth.guard";
-import { Roles } from "modules/role/decorators/roles.decorator";
-import { Role } from "modules/role/enums/role.enum";
-import { RolesGuard } from "modules/role/guards/roles.guard";
 
 @Controller("auth")
 export class AuthController {
@@ -48,8 +45,7 @@ export class AuthController {
     return this.authService.signUp(email, password, full_name, phone_number);
   }
 
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles(Role.USER, Role.ADMIN)
+  @UseGuards(AuthGuard)
   @Get("me")
   getProfile(@Req() req) {
     return this.authService.getProfile(req.user.id);

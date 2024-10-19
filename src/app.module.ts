@@ -38,10 +38,10 @@ import { RolesGuard } from "modules/role/guards/roles.guard";
   ],
   providers: [
     AppService,
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: RolesGuard,
+    // },
   ],
   controllers: [AppController]
 })
