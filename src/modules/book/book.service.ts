@@ -26,4 +26,9 @@ export class BookService {
     async delete(id: string) {
         return this.bookRepository.delete(id); // Delete book by ID
     }
+    async getBooks({ page, limit }: { page: number; limit: number }) {
+        const [books, totalBooks] = await this.bookRepository.getBooks({ page, limit });
+        return { books, totalBooks };
+    }
+    
 }

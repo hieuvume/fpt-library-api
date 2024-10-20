@@ -27,4 +27,16 @@ export class BookRepository {
     async delete(id: string) {
         return this.bookModel.findByIdAndDelete(id).exec();
     }
+    async getBooks({ page, limit }: { page: number; limit: number }): Promise<[Book[], number]> {
+        const books = await this.bookModel
+            .find()
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .exec();
+
+        const totalBooks = await this.bookModel.countDocuments();
+
+        return [books, totalBooks];
+    }
+    
 }
