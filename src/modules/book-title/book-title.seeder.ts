@@ -25,8 +25,6 @@ export class BookTitleSeeder implements Seeder {
       return bookTitle;
     });
 
-    console.log(bookTitles);
-
     // Lưu vào DB
     return this.bookTitleModel.insertMany(bookTitles);
   }
