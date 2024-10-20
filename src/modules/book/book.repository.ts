@@ -27,4 +27,5 @@ export class BookRepository {
     async delete(id: string) {
         return this.bookModel.findByIdAndDelete(id).exec();
     }
+  
 }

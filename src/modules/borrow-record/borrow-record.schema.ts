@@ -1,34 +1,72 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Transform, Type } from 'class-transformer';
+import { BookTitle } from 'modules/book-title/book-title.schema';
+import { Book } from 'modules/book/book.schema';
+import { User } from 'modules/user/user.schema';
 import { Document, Types } from 'mongoose';
+import { Factory } from 'nestjs-seeder';
 
 export type BorrowRecordDocument = BorrowRecord & Document;
 
 @Schema()
 export class BorrowRecord {
-  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
-  user_id: Types.ObjectId;
 
-  @Prop({ type: Types.ObjectId, ref: 'Book', required: true })
-  book_id: Types.ObjectId;
+  @Transform(({ value }) => value.toString())
+  _id: Types.ObjectId;
 
-  @Prop({ required: true })
+  @Prop({ type: Types.ObjectId, ref: User.name, required: true })
+  @Type(() => User)
+  user: User;
+
+  @Prop({ type: Types.ObjectId, ref: Book.name, required: true })
+  @Type(() => Book)
+  book: Book;
+
+  @Prop({ type: Types.ObjectId, ref: BookTitle.name, required: true })
+  @Type(() => BookTitle)
+  book_title: BookTitle;
+
+  @Factory(() => '')
+  @Prop({ })
   before_status: string;
 
-  @Prop({ required: true })
+  @Factory(() => 'Bình thường')
+  @Prop({ })
   after_status: string;
 
+  @Factory(() => {
+    const days = Math.floor(Math.random() * 20) + 10;
+    const date = new Date();
+    date.setDate(date.getDate() - days);
+    return date;
+  })
   @Prop({ required: true })
   borrow_date: Date;
 
+  @Factory(() => {
+    const days = Math.floor(Math.random() * 10) + 5;
+    const date = new Date();
+    date.setDate(date.getDate() + days);
+    return date;
+  })
   @Prop({ required: true })
   due_date: Date;
 
+  @Factory(() => {
+    const days = Math.floor(Math.random() * 10) + 5;
+    const date = new Date();
+    date.setDate(date.getDate() + days);
+    return date;
+  })
+  @Factory(() => new Date())
   @Prop()
   return_date: Date;
 
+  @Factory(() => true)
   @Prop({ required: true })
   is_returned: boolean;
 
+  @Factory(() => 0)
   @Prop()
   penatly_total: number;
 }
