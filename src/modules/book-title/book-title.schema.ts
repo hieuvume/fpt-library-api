@@ -48,6 +48,11 @@ export class BookTitle {
   @Factory(faker => faker.number.int({ min: 10000, max: 50000 }))
   @Prop({ required: true })
   price: number;
+
+  @Factory(faker => faker.number.int({ min: 1, max: 50 }))
+  @Prop()
+  times_borrowed: number;
+
 }
 
 export const BookTitleSchema = SchemaFactory.createForClass(BookTitle);
