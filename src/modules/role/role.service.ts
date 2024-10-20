@@ -3,5 +3,10 @@ import { RoleRepository } from './role.repository';
 
 @Injectable()
 export class RoleService {
-  constructor(private readonly roleRepository: RoleRepository) {}
+  constructor(private readonly roleRepository: RoleRepository) { }
+
+  async initIfEmpty() {
+    return this.roleRepository.initIfEmpty();
+  }
+
 }

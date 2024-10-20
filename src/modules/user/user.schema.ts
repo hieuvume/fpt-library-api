@@ -1,20 +1,25 @@
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
-import { Document, Types } from "mongoose";
+import { Transform, Type } from "class-transformer";
+import { Book } from "modules/book/book.schema";
+import { MembershipCard } from "modules/membership-card/membership-card.schema";
+import { Role } from "modules/role/role.schema";
+import { Document, ObjectId, Types } from "mongoose";
 
 export type UserDocument = User & Document;
 
 @Schema()
 export class User {
-  @Prop({ required: true })
-  username: string;
 
-  @Prop({ required: true })
-  password: string;
+  @Transform(({ value }) => value.toString())
+  _id: ObjectId;
 
   @Prop({ required: true, unique: true })
   email: string;
 
-  @Prop({ required: true })
+  @Prop({})
+  password: string;
+
+  @Prop({})
   full_name: string;
 
   @Prop()
@@ -23,14 +28,17 @@ export class User {
   @Prop({ type: Object })
   id_card: object;
 
-  @Prop({ type: Types.ObjectId, ref: "MembershipCard" })
-  current_membership_id: Types.ObjectId;
+  @Prop({ type: Types.ObjectId, ref: MembershipCard.name })
+  @Type(() => MembershipCard)
+  current_membership_id: MembershipCard;
 
-  @Prop({ type: [Types.ObjectId], ref: "Book" })
-  borrowed_books: Types.ObjectId[];
+  @Prop({ type: [Types.ObjectId], ref: Book.name })
+  @Type(() => Book)
+  borrowed_books: Book[];
 
-  @Prop({ type: Types.ObjectId, ref: "Role" })
-  role_id: Types.ObjectId;
+  @Prop({ type: Types.ObjectId, ref: Role.name })
+  @Type(() => Role)
+  role: Role;
 
   @Prop()
   google_id: string;
@@ -40,7 +48,8 @@ export class User {
 
   @Prop()
   token_expires_at: Date;
-
+  @Prop()
+  address: string;
   @Prop()
   created_at: Date;
 
@@ -48,4 +57,6 @@ export class User {
   updated_at: Date;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+const UserSchema = SchemaFactory.createForClass(User);
+
+export { UserSchema };

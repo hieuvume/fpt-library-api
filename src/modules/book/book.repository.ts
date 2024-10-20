@@ -19,4 +19,14 @@ export class BookRepository {
   async findById(id: string): Promise<Book> {
     return this.bookModel.findById(id).exec();
   }
+  async getPaginatedBooks(bookIds: string[], page: number, limit: number) {
+    const skip = (page - 1) * limit;
+
+    return this.bookModel
+      .find({ _id: { $in: bookIds } }) // Find books by IDs
+      .skip(skip)
+      .limit(limit)
+      .populate('book_title') 
+      .exec();
+  }
 }
