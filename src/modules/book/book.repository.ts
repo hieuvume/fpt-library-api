@@ -19,4 +19,5 @@ export class BookRepository {
   async findById(id: string): Promise<Book> {
     return this.bookModel.findById(id).exec();
   }
+
 }

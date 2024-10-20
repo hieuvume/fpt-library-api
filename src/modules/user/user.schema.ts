@@ -1,36 +1,62 @@
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
-import { Document, Types } from "mongoose";
-
+import { Transform, Type } from "class-transformer";
+import { Book } from "modules/book/book.schema";
+import { MembershipCard } from "modules/membership-card/membership-card.schema";
+import { Role } from "modules/role/role.schema";
+import { Document, ObjectId, Types } from "mongoose";
+import { Factory } from "nestjs-seeder";
+import * as bcrypt from "bcryptjs";
 export type UserDocument = User & Document;
 
 @Schema()
 export class User {
-  @Prop({ required: true })
-  username: string;
 
-  @Prop({ required: true })
-  password: string;
+  @Transform(({ value }) => value.toString())
+  _id: ObjectId;
 
+  @Factory(faker => faker.internet.email())
   @Prop({ required: true, unique: true })
   email: string;
 
-  @Prop({ required: true })
+  @Factory(() => bcrypt.hashSync('123123', 10))
+  @Prop({})
+  password: string;
+
+  @Factory(faker => faker.person.fullName())
+  @Prop({})
   full_name: string;
 
+  @Factory(faker => faker.phone.number())
   @Prop()
   phone_number: string;
 
+  @Factory(faker => faker.location.streetAddress())
+  @Prop()
+  address: string;
+
+  @Factory(faker => ({
+    id_number: faker.string.alphanumeric(12),
+    date: faker.date.past(),
+    place: faker.location.city(),
+  }))
   @Prop({ type: Object })
   id_card: object;
 
-  @Prop({ type: Types.ObjectId, ref: "MembershipCard" })
-  current_membership_id: Types.ObjectId;
+  @Prop({ type: Types.ObjectId, ref: MembershipCard.name })
+  @Type(() => MembershipCard)
+  current_membership_id: MembershipCard;
 
-  @Prop({ type: [Types.ObjectId], ref: "Book" })
-  borrowed_books: Types.ObjectId[];
+  @Prop({ type: [Types.ObjectId], ref: Book.name })
+  @Type(() => Book)
+  borrowed_books: Book[];
 
-  @Prop({ type: Types.ObjectId, ref: "Role" })
-  role_id: Types.ObjectId;
+  @Prop({ type: Types.ObjectId, ref: Role.name })
+  @Type(() => Role)
+  role: Role;
+
+  @Factory(faker => faker.image.avatar())
+  @Prop()
+  avatar_url: string;
 
   @Prop()
   google_id: string;
@@ -41,11 +67,15 @@ export class User {
   @Prop()
   token_expires_at: Date;
 
+  @Factory(() => new Date())
   @Prop()
   created_at: Date;
 
+  @Factory(() => new Date())
   @Prop()
   updated_at: Date;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+const UserSchema = SchemaFactory.createForClass(User);
+
+export { UserSchema };
