@@ -11,5 +11,4 @@ export class BookService {
     return this.bookRepository.findAll();
   }
 
-
 }

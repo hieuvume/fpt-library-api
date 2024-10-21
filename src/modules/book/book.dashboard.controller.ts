@@ -6,7 +6,7 @@ import { Roles } from 'modules/role/decorators/roles.decorator';
 import { Role } from 'modules/role/enums/role.enum';
 
 // @UseGuards(AuthGuard, RolesGuard)
-@Roles(Role.LIBRARIAN)
+// @Roles(Role.LIBRARIAN)
 @Controller('dashboard/books')
 export class BookDashboardController {
     constructor(private readonly bookService: BookService) { }

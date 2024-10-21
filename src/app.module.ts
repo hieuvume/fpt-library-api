@@ -14,9 +14,9 @@ import { AppService } from "./app.service";
 import { BookTitleSeeder } from "modules/book-title/book-title.seeder";
 import { BookSeeder } from "modules/book/book.seeder";
 import { CategorySeeder } from "modules/category/category.seeder";
-import { MembershipCardModule } from "modules/membership-card/membership-card.module";
-import { MembershipModule } from "modules/membership/membership.module";
+import { BorrowRecordMoule } from "modules/borrow-record/borrow-record.module";
 import { BookTitleModule } from "modules/book-title/book-title.module";
+import { MembershipModule } from "modules/membership/membership.module";
 
 @Module({
   imports: [
@@ -36,10 +36,9 @@ import { BookTitleModule } from "modules/book-title/book-title.module";
     AuthModule,
     ResetPasswordModule,
     RoleModule,
-    MembershipCardModule,
-    MembershipModule,
     BookTitleModule,
-    
+    BorrowRecordMoule,
+    MembershipModule,
   ],
   providers: [
     AppService,
