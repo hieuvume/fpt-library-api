@@ -35,6 +35,10 @@ export class Book {
   @Prop({ required: true })
   status: string;
 
+  @Factory(faker => faker.number.int({ min: 1, max: 10 }))
+  @Prop()
+  times_borrowed: number;
+
   @Factory(faker => faker.date.past())
   @Prop()
   created_at: Date;

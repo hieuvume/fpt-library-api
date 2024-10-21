@@ -23,6 +23,7 @@ export class UserSeeder implements Seeder {
       full_name: 'Admin',
       phone_number: '0123456789',
       role: adminRole._id,
+      avatar_url: 'https://avatars.githubusercontent.com/u/91399314'
     })
 
     const users = DataFactory.createForClass(User).generate(100);
