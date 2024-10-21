@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, Req, Query } from '@nestjs/common';
 import { BorrowRecord } from './borrow-record.schema';
 import { BorrowRecordService } from './borrow-record.service';
 import { AuthGuard } from 'modules/auth/guards/auth.guard';
@@ -13,7 +13,11 @@ export class BorrowRecordController {
   //History book
   @UseGuards(AuthGuard)
   @Get('histories')
-  async findAllBooks(@Req() req) {
-    return this.borrowRecordService.findAll(req.user.id);
+  async findAllBooks(
+    @Req() req, 
+    @Query('page') page: number = 1, 
+    @Query('limit') limit: number = 10, 
+  ) {
+    return this.borrowRecordService.findAll(req.user.id, page, limit);
   }
 }

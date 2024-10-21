@@ -1,11 +1,18 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { BookTitleService } from './book-title.service';
 
-
-// gobal
-
-@Controller('book')
+@Controller('book-titles')
 export class BookTitleController {
-  constructor(private readonly bookTitleService: BookTitleService) {}
+    constructor(private readonly bookService: BookTitleService) { }
+
+    @Get('best-of-the-month')
+    async findBestOfTheMonth() {
+        return this.bookService.findBestOfTheMonth();
+    }
+
+    @Post('add')
+    async addBook(@Body() book) {
+
+    }
 
 }

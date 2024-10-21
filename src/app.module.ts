@@ -3,7 +3,10 @@ import { ConfigModule } from "@nestjs/config";
 import { MongooseModule } from "@nestjs/mongoose";
 import { MailModule } from "mail/mail.module";
 import { AuthModule } from "modules/auth/auth.module";
+import { BookTitleModule } from "modules/book-title/book-title.module";
+import { BookTitle, BookTitleSchema } from "modules/book-title/book-title.schema";
 import { BookModule } from "modules/book/book.module";
+import { BorrowRecordModule } from "modules/borrow-record/borrow-record.module";
 import { CategoryModule } from "modules/category/category.module";
 import { ResetPasswordModule } from "modules/reset-password/reset-password.module";
 import { RoleModule } from "modules/role/role.module";
@@ -11,12 +14,15 @@ import { SettingModule } from "modules/setting/setting.module";
 import { UserModule } from "modules/user/user.module";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
+import { Book, BookSchema } from "modules/book/book.schema";
+import { BorrowRecord, BorrowRecordSchema } from "modules/borrow-record/borrow-record.schema";
+import { Category, CategorySchema } from "modules/category/category.schema";
+import { Membership, MembershipSchema } from "modules/membership/membership.schema";
 import { BookTitleSeeder } from "modules/book-title/book-title.seeder";
 import { BookSeeder } from "modules/book/book.seeder";
 import { CategorySeeder } from "modules/category/category.seeder";
-import { BorrowRecordMoule } from "modules/borrow-record/borrow-record.module";
-import { BookTitleModule } from "modules/book-title/book-title.module";
 import { MembershipModule } from "modules/membership/membership.module";
+import { MembershipCardModule } from "modules/membership-card/membership-card.module";
 
 @Module({
   imports: [
@@ -37,8 +43,9 @@ import { MembershipModule } from "modules/membership/membership.module";
     ResetPasswordModule,
     RoleModule,
     BookTitleModule,
-    BorrowRecordMoule,
+    BorrowRecordModule,
     MembershipModule,
+    MembershipCardModule,
   ],
   providers: [
     AppService,

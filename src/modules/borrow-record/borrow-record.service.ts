@@ -23,6 +23,7 @@ export class BorrowRecordService {
       book: {
         title: record.book.book_title.title,
         author: record.book.book_title.author,
+        depscription: record.book.book_title.description,
         categories: record.book.book_title.categories.map(category => category.title),
         memberships: record.book.book_title.memberships.map(membership => ({
           name: membership.name,

@@ -7,6 +7,7 @@ export class BorrowRecordDto {
     book: {
       title: string;
       author: string[];
+      depscription:string;
       categories: string[];
       memberships: {
         name: string;
