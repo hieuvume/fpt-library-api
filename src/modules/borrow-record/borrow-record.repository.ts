@@ -14,23 +14,29 @@ export class BorrowRecordRepository {
     return this.borrowRecordModel.find().exec();
   }
   async findAllByUserId(userId: string, page: number, limit: number): Promise<BorrowRecord[]> {
-    const skip = (page - 1) * limit; 
+    const skip = (page - 1) * limit;
 
     return this.borrowRecordModel
       .find({ user: new Types.ObjectId(userId) })
-      .skip(skip) 
-      .limit(limit) 
-      .populate({
-        path: 'book',
-        populate: {
-          path: 'book_title',
-          populate: [
-            { path: 'categories' },
-            { path: 'memberships' },
-          ],
+      .skip(skip)
+      .limit(limit)
+      .populate([
+        {
+          path: 'book',
+          populate: {
+            path: 'book_title',
+            populate: [
+              { path: 'categories' },
+              { path: 'memberships' }
+            ]
+          }
         },
-      })
+        { path: 'librarian' }
+      ])
       .exec();
+  }
+  async countByUserId(userId: string): Promise<number> {
+    return this.borrowRecordModel.countDocuments({ user: new Types.ObjectId(userId) });
   }
   async create(data: any): Promise<BorrowRecord> {
     const newBorrowRecord = new this.borrowRecordModel(data);
@@ -42,7 +48,7 @@ export class BorrowRecordRepository {
   }
 
   async findBestBookTitleOfTheMonth() {
-    
+
     const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
     const endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
 
@@ -93,7 +99,7 @@ export class BorrowRecordRepository {
         },
       },
     ]).exec();
-    
+
   }
 
 }

@@ -26,6 +26,10 @@ export class BorrowRecord {
   @Type(() => BookTitle)
   book_title: BookTitle;
 
+  @Prop({ type: Types.ObjectId, ref: User.name, required: true })
+  @Type(() => User)
+  librarian: User;
+
   @Factory(() => '')
   @Prop({ })
   before_status: string;
