@@ -8,7 +8,7 @@ export type BookDocument = Book & Document;
 @Schema()
 export class Book {
   @Factory(() => new Types.ObjectId())
-  @Prop({ type: Types.ObjectId, ref: BookTitle.name, required: true })
+  @Prop({ type: Types.ObjectId, ref: 'BookTitle', required: true })
   book_title: BookTitle;
 
   @Factory(faker => faker.string.uuid())

@@ -16,9 +16,11 @@ import {
 } from "modules/borrow-record/borrow-record.schema";
 import { UserSeeder } from "modules/user/user.seeder";
 import { User, UserSchema } from "modules/user/user.schema";
-import { BorrowRecordSeeder } from "modules/borrow-record/user.seeder";
+import { BorrowRecordSeeder } from "modules/borrow-record/borrow-record.seeder";
 import { News, NewsSchema } from "modules/news/news.schema";
 import { NewsSeeder } from "modules/news/news.seeder";
+import { Feedback, FeedbackSchema } from "modules/feedback/feedback.schema";
+import { FeedbackSeeder } from "modules/feedback/feedback.seeder";
 
 seeder({
   imports: [
@@ -35,6 +37,7 @@ seeder({
       { name: User.name, schema: UserSchema },
       { name: BorrowRecord.name, schema: BorrowRecordSchema },
       { name: News.name, schema: NewsSchema },
+      { name: Feedback.name, schema: FeedbackSchema },
     ]),
   ],
 }).run([
@@ -44,4 +47,5 @@ seeder({
   BookSeeder,
   BorrowRecordSeeder,
   NewsSeeder,
+  FeedbackSeeder,
 ]);

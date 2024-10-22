@@ -22,7 +22,7 @@
     "seed:refresh": "node dist/seeder --refresh"
   },
   "dependencies": {
-    "@faker-js/faker": "^8.4.1",
+    "@faker-js/faker": "^9.0.3",
     "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.3",
@@ -37,6 +37,7 @@
     "dotenv": "^16.4.5",
     "fpt-library-api": "file:",
     "mongoose": "^8.7.1",
+    "mongoose-paginate-v2": "^1.8.5",
     "nestjs-seeder": "^0.3.2",
     "nodemailer": "^6.9.15",
     "passport": "^0.7.0",

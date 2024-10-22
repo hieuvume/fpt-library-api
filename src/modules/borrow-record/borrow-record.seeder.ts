@@ -12,7 +12,6 @@ export class BorrowRecordSeeder implements Seeder {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
     @InjectModel(Book.name) private readonly bookModel: Model<Book>,
-    @InjectModel(BookTitle.name) private readonly bookTitleModel: Model<BookTitle>,
     @InjectModel(BorrowRecord.name) private readonly borrowRecordModel: Model<BorrowRecord>,
   ) { }
 

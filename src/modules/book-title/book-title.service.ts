@@ -13,4 +13,8 @@ export class BookTitleService {
     return this.borrowRecordRepository.findBestBookTitleOfTheMonth();
   }
 
+  async searchByKeyword(keyword: string, page: number, limit: number) {
+    return this.bookTitleRepository.searchByKeyword(keyword, page, limit);
+  }
+
 }

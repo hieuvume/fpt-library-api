@@ -18,7 +18,7 @@ export class BookTitleSeeder implements Seeder {
     const categories = await this.categoryModel.find();
 
     // Tạo 10 BookTitle giả và liên kết với các Category
-    const bookTitles = DataFactory.createForClass(BookTitle).generate(50).map((bookTitle) => {
+    const bookTitles = DataFactory.createForClass(BookTitle).generate(1000).map((bookTitle) => {
       bookTitle.categories = categories
         .slice(0, Math.floor(Math.random() * categories.length) + 1)
         .map((category) => category._id);
