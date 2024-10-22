@@ -6,6 +6,7 @@ import { Role } from 'modules/role/role.schema';
 import path from 'path';
 import { Book, BookDocument } from 'modules/book/book.schema';
 import { BookRepository } from 'modules/book/book.repository';
+import { UserDto } from './dto/user.dto';
 
 @Injectable()
 export class UserRepository {
@@ -45,6 +46,14 @@ export class UserRepository {
   async updatePassword(id: ObjectId, password: string) {
     return this.userModel.updateOne({ _id: id }, { password }).exec();
   }
-
- 
+  async updateUser(id: string, data:any) {
+    return this.userModel.findByIdAndUpdate({ _id: id }, data).exec();
+  } 
+  async changePassword(id: string, data : any) {
+    const user = await this.findUserById(id);
+    if (!user) {
+      throw new NotFoundException();
+    }
+    return this.userModel.updateOne({ _id: id }, { password: data.password }).exec();
+  }
 }

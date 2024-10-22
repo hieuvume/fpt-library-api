@@ -2,6 +2,7 @@ import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
 import { Factory } from "nestjs-seeder";
 import { BookTitle } from "modules/book-title/book-title.schema";
+import { Category } from "modules/category/category.schema";
 
 export type BookDocument = Book & Document;
 
@@ -18,7 +19,7 @@ export class Book {
   @Factory(faker => faker.string.alphanumeric(3))
   @Prop({ required: true })
   section: string;
-
+  
   @Factory(faker => faker.string.alphanumeric(3))
   @Prop({ required: true })
   shelf: string;
