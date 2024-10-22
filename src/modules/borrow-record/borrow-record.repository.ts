@@ -67,7 +67,7 @@ export class BorrowRecordRepository {
       },
       {
         // Lấy 5 cuốn sách được mượn nhiều nhất
-        $limit: 5,
+        $limit: 15,
       },
       {
         // Sử dụng $lookup để lấy thông tin từ bảng BookTitle
