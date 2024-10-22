@@ -16,6 +16,7 @@ import { SettingModule } from "modules/setting/setting.module";
 import { UserModule } from "modules/user/user.module";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
+import { FeedbackModule } from "modules/feedback/feedback.module";
 
 @Module({
   imports: [
@@ -23,9 +24,9 @@ import { AppService } from "./app.service";
       isGlobal: true, // no need to import into other modules
     }),
     MongooseModule.forRoot("mongodb://localhost:27017", {
-      user: 'root',
-      dbName: 'library',
-      pass: '123456',
+      user: "root",
+      dbName: "library",
+      pass: "123456",
     }),
     MailModule,
     SettingModule,
@@ -40,10 +41,9 @@ import { AppService } from "./app.service";
     NewsModule,
     MembershipModule,
     MembershipCardModule,
+    FeedbackModule,
   ],
-  providers: [
-    AppService,
-  ],
-  controllers: [AppController]
+  providers: [AppService],
+  controllers: [AppController],
 })
-export class AppModule { }
+export class AppModule {}

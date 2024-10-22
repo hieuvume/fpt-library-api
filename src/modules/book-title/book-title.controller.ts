@@ -1,18 +1,24 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
-import { BookTitleService } from './book-title.service';
+import { Controller, Get, Post, Body, Param, Query } from "@nestjs/common";
+import { BookTitleService } from "./book-title.service";
 
-@Controller('book-titles')
+@Controller("book-titles")
 export class BookTitleController {
-    constructor(private readonly bookService: BookTitleService) { }
+  constructor(private readonly bookTitleService: BookTitleService) {}
 
-    @Get('best-of-the-month')
-    async findBestOfTheMonth() {
-        return this.bookService.findBestOfTheMonth();
-    }
+  @Get("best-of-the-month")
+  async findBestOfTheMonth() {
+    return this.bookTitleService.findBestOfTheMonth();
+  }
 
-    @Post('add')
-    async addBook(@Body() book) {
+  @Get("search")
+  async search(
+    @Query("keyword") keyword,
+    @Query("page") page,
+    @Query("limit") limit
+  ) {
+    return this.bookTitleService.searchByKeyword(keyword, page, limit);
+  }
 
-    }
-
+  @Post("add")
+  async addBook(@Body() book) {}
 }

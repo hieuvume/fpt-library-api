@@ -10,32 +10,31 @@ export type UserDocument = User & Document;
 
 @Schema()
 export class User {
-
   @Transform(({ value }) => value.toString())
   _id: ObjectId;
 
-  @Factory(faker => faker.internet.email())
+  @Factory((faker) => faker.internet.email())
   @Prop({ required: true, unique: true })
   email: string;
 
-  @Factory(() => bcrypt.hashSync('123123', 10))
+  @Factory(() => bcrypt.hashSync("123123", 10))
   @Prop({})
   password: string;
 
-  @Factory(faker => faker.person.fullName())
+  @Factory((faker) => faker.person.fullName())
   @Prop({})
   full_name: string;
 
-  @Factory(faker => faker.phone.number())
+  @Factory((faker) => faker.phone.number({ style: "international" }))
   @Prop()
   phone_number: string;
 
-  @Factory(faker => faker.location.streetAddress())
+  @Factory((faker) => faker.location.streetAddress())
   @Prop()
   address: string;
 
-  @Factory(faker => ({
-    id_number: faker.string.alphanumeric(12),
+  @Factory((faker) => ({
+    id_number: faker.string.numeric(12),
     date: faker.date.past(),
     place: faker.location.city(),
   }))
@@ -54,7 +53,7 @@ export class User {
   @Type(() => Role)
   role: Role;
 
-  @Factory(faker => faker.image.avatar())
+  @Factory((faker) => faker.image.avatar())
   @Prop()
   avatar_url: string;
 
