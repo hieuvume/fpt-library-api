@@ -7,7 +7,6 @@ export class BookTitleController {
 
     @Get('best-of-the-month')
     async findBestOfTheMonth() {
-        
         return this.bookService.findBestOfTheMonth();
     }
 

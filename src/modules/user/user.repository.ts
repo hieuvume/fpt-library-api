@@ -1,12 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
 import { User, UserDocument } from './user.schema';
 import { Role } from 'modules/role/role.schema';
+import path from 'path';
+import { Book, BookDocument } from 'modules/book/book.schema';
+import { BookRepository } from 'modules/book/book.repository';
 
 @Injectable()
 export class UserRepository {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) { }
+  constructor(
+  @InjectModel(User.name) private userModel: Model<UserDocument>,
+  private readonly bookRepository: BookRepository,) { }
 
   async findAll(): Promise<User[]> {
     return this.userModel.find().exec();
@@ -14,6 +19,18 @@ export class UserRepository {
 
   async findById(id: string): Promise<User> {
     return this.userModel.findById(id).populate('role');
+  }
+  async findUserById(id: string): Promise<User> {
+    return this.userModel
+      .findById(id)
+      .populate('role') 
+      .populate({
+        path: 'current_membership_id', 
+        populate: {
+          path: 'membership_id', 
+        },
+      })
+      .exec();
   }
 
   async findOneByEmail(email: string): Promise<User | null> {
@@ -29,5 +46,5 @@ export class UserRepository {
     return this.userModel.updateOne({ _id: id }, { password }).exec();
   }
 
-
+ 
 }
