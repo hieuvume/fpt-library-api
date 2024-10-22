@@ -5,10 +5,14 @@ import { NewsRepository } from './news.repository';
 
 @Injectable()
 export class NewsService {
-  constructor(private readonly categoryRepository: NewsRepository) {}
+  constructor(private readonly newsRepository: NewsRepository) {}
+
+  async findAll() {
+    return this.newsRepository.findAll();
+  }
 
   async findByTitle(title: string) {
-    return this.categoryRepository.findByTitle(title);
+    return this.newsRepository.findByTitle(title);
   }
 
 }

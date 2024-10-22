@@ -18,6 +18,7 @@ import { Book, BookSchema } from "modules/book/book.schema";
 import { BorrowRecord, BorrowRecordSchema } from "modules/borrow-record/borrow-record.schema";
 import { Category, CategorySchema } from "modules/category/category.schema";
 import { Membership, MembershipSchema } from "modules/membership/membership.schema";
+import { NewsModule } from "modules/news/news.module";
 
 @Module({
   imports: [
@@ -38,7 +39,8 @@ import { Membership, MembershipSchema } from "modules/membership/membership.sche
     ResetPasswordModule,
     RoleModule,
     BookTitleModule,
-    BorrowRecordModule
+    BorrowRecordModule,
+    NewsModule
   ],
   providers: [
     AppService,

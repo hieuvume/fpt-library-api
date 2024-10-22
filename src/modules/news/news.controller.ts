@@ -3,6 +3,10 @@ import { NewsService } from './news.service';
 
 @Controller('news')
 export class NewsController {
-  constructor(private readonly categoryService: NewsService) {}
+  constructor(private readonly newsService: NewsService) {}
 
+  @Get('')
+  async findAllNews() {
+    return this.newsService.findAll();
+  }
 }
