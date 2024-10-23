@@ -18,14 +18,15 @@ export class BorrowRecordSeeder implements Seeder {
 
   async seed(): Promise<any> {
     const records = DataFactory.createForClass(BorrowRecord).generate(100);
-
-    const users = await this.userModel.find();
-    const books = await this.bookModel.find().populate('book_title');
-
-    records.forEach(async record => {
-      record.user = users[Math.floor(Math.random() * users.length)];
-      record.book = books[Math.floor(Math.random() * books.length)];
-      record.book_title = record.book.book_title;
+    records.forEach(async (record) => {
+      const randomLibrarian = librarianUsers[Math.floor(Math.random() * librarianUsers.length)];
+      const randomUser = users[Math.floor(Math.random() * users.length)];
+      const randomBook = books[Math.floor(Math.random() * books.length)];
+      record.user = randomUser._id;
+      record.book = randomBook._id;
+      record.book_title = randomBook.book_title._id;
+      record.librarian = randomLibrarian._id;
+      ///test
     });
 
     return this.borrowRecordModel.insertMany(records);
