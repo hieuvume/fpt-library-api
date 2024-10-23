@@ -39,6 +39,7 @@ export class BorrowRecordSeeder implements Seeder {
       record.book = randomBook._id;
       record.book_title = randomBook.book_title._id;
       record.librarian = randomLibrarian._id;
+      ///test
     });
 
     return this.borrowRecordModel.insertMany(records);
