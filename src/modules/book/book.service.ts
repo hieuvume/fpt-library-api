@@ -16,6 +16,7 @@ export class BookService {
     async create(book: CreateBookDto) {
         return this.bookRepository.create(book); // Create a new book
     }
+    
 
     async findById(id: string) {
         
@@ -30,18 +31,30 @@ export class BookService {
         return book.populate(
             {
                 path: 'book_title',
+                select: ['title','description','brief_content','cover_image'],
                 populate: [{
-                    path: 'categories'
+                    path: 'categories',
+                    select:['title','description']
+
                 },
                 {
                     path: 'memberships'
-
-                }]
+                },
+                {
+                    path: 'feedbacks',
+                    populate:{
+                        path:'user',
+                        select:['full_name','avatar_url']
+                    },
+                    select:['content','rating'],
+                }
+            ],
             },
+            
 
         );
     }
-
+    
     async update(id: string, book: UpdateBookDto) {
         return this.bookRepository.update(id, book); // Update book by ID
     }

@@ -18,6 +18,10 @@ export class BookTitleController {
   ) {
     return this.bookTitleService.searchByKeyword(keyword, page, limit);
   }
+  @Get(":id")
+  async getBookById(@Param("id") id) {
+    return this.bookTitleService.getBookById(id);
+  }
 
   @Post("add")
   async addBook(@Body() book) {}

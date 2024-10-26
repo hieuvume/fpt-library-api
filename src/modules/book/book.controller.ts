@@ -12,10 +12,9 @@ export class BookController {
     return this.bookService.findAll();
   }
   @Get(':id')
-  async findBook(@Param('id') id) {
+  async findBook(@Param('id') id:string) {
     return this.bookService.findById(id);
   }
-
   @Post('add')
   async addBook(@Body() book) {
     

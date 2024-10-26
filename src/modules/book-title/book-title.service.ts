@@ -17,4 +17,8 @@ export class BookTitleService {
     return this.bookTitleRepository.searchByKeyword(keyword, page, limit);
   }
 
+  async getBookById(id: string) {
+    return this.bookTitleRepository.findById(id);
+  }
+
 }

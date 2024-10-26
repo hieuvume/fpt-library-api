@@ -26,9 +26,9 @@ export class BookTitleRepository {
     return this.bookTitleModel.findById(id).exec();
   }
 
+
   async searchByKeyword(keyword: string, page: number, limit: number) {
     const searchRegex = new RegExp(keyword, "i");
-
     return this.bookTitleModel.paginate(
       {
         $or: [

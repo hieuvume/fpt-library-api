@@ -1,5 +1,5 @@
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { Book } from './book.schema';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
@@ -17,7 +17,7 @@ export class BookRepository {
     }
 
     async findById(id: string) {
-        return this.bookModel.findById(id).exec();
+        return this.bookModel.findById({book_title:new mongoose.Types.ObjectId(id)}).exec();
     }
 
     async update(id: string, book: UpdateBookDto) {
