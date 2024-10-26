@@ -31,5 +31,9 @@ export class UserService {
     }
     return this.userRepository.changePassword(id, data.password);
   }
+
+  async findAll() {
+    return this.userRepository.findAll();
+  }
 }
 

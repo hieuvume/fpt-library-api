@@ -25,7 +25,7 @@ export class User {
   @Prop({})
   full_name: string;
 
-  @Factory((faker) => faker.phone.number({ style: "international" }))
+  @Factory((faker) => faker.phone.number())
   @Prop()
   phone_number: string;
 
