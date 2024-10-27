@@ -29,6 +29,14 @@ export class User {
   @Prop()
   phone_number: string;
 
+  @Factory((faker) => faker.person.gender())
+  @Prop()
+  gender: string;
+
+  @Factory((faker) => faker.date.past())
+  @Prop()
+  date_of_birth: Date;
+
   @Factory((faker) => faker.location.streetAddress())
   @Prop()
   address: string;

@@ -1,20 +1,42 @@
-import { Controller, Get, Post, Body, Param, UseGuards, Req, Query } from '@nestjs/common';
-import { BorrowRecord } from './borrow-record.schema';
-import { BorrowRecordService } from './borrow-record.service';
-import { AuthGuard } from 'modules/auth/guards/auth.guard';
+import {
+  Controller,
+  Get,
+  Query,
+  Req,
+  UseGuards
+} from "@nestjs/common";
+import { AuthGuard } from "modules/auth/guards/auth.guard";
+import { BorrowRecordService } from "./borrow-record.service";
 
-
-@Controller('borrow-records')
+@Controller("borrow-records")
 export class BorrowRecordController {
-  constructor(private readonly borrowRecordService: BorrowRecordService) { }
-  //History book
+  constructor(private readonly borrowRecordService: BorrowRecordService) {}
+
   @UseGuards(AuthGuard)
-  @Get('histories')
+  @Get("current-loans")
+  async findCurrentLoans(
+    @Req() req,
+  ) {
+    return this.borrowRecordService.findCurrentLoans(
+      req.user.id,
+    );
+  }
+
+  @UseGuards(AuthGuard)
+  @Get("histories")
   async findAllBooks(
     @Req() req,
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 5,
+    @Query("page") page: number = 1,
+    @Query("limit") limit: number = 10,
+    @Query("sort") sort: string,
+    @Query("order") order: string
   ) {
-    return this.borrowRecordService.findHistoriesBook(req.user.id, page, limit);
+    return this.borrowRecordService.findHistoriesBook(
+      req.user.id,
+      page,
+      limit,
+      sort,
+      order
+    );
   }
 }

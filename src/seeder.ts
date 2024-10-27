@@ -21,6 +21,8 @@ import { News, NewsSchema } from "modules/news/news.schema";
 import { NewsSeeder } from "modules/news/news.seeder";
 import { Feedback, FeedbackSchema } from "modules/feedback/feedback.schema";
 import { FeedbackSeeder } from "modules/feedback/feedback.seeder";
+import { MembershipSeeder } from "modules/membership/membership.seeder";
+import { Membership, MembershipSchema } from "modules/membership/membership.schema";
 
 seeder({
   imports: [
@@ -38,6 +40,7 @@ seeder({
       { name: BorrowRecord.name, schema: BorrowRecordSchema },
       { name: News.name, schema: NewsSchema },
       { name: Feedback.name, schema: FeedbackSchema },
+      { name: Membership.name, schema: MembershipSchema },
     ]),
   ],
 }).run([
@@ -48,4 +51,5 @@ seeder({
   BorrowRecordSeeder,
   NewsSeeder,
   FeedbackSeeder,
+  MembershipSeeder
 ]);
