@@ -63,7 +63,6 @@ export class BorrowRecord {
   })
   @Prop({ required: true })
   due_date: Date;
-
   @Factory(() => {
     const days = Math.floor(Math.random() * 10) + 5;
     const date = new Date();

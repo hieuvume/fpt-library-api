@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BorrowRecordRepository } from './borrow-record.repository';
+import { BorrowRecord } from './borrow-record.schema';
+import { BookRepository } from 'modules/book/book.repository';
 
 @Injectable()
 export class BorrowRecordService {
