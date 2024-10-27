@@ -34,7 +34,7 @@ export class Book {
 
   @Factory(() => 'available')
   @Prop({ required: true })
-  status: string;
+  status: string; // [available, borrowed, losted]
 
   @Factory(faker => faker.number.int({ min: 1, max: 10 }))
   @Prop()

@@ -14,6 +14,15 @@ export class Membership {
   @Prop({ required: true })
   price_yearly: number;
 
+  @Prop({ required: true })
+  max_borrow_days: number;
+
+  @Prop({ required: true })
+  max_borrow_books_per_time: number;
+
+  @Prop({ required: true })
+  max_reserve_books_per_montly: number;
+
   @Prop()
   color: string;
 }

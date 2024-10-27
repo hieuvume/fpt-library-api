@@ -30,7 +30,7 @@ export class BorrowRecordSeeder implements Seeder {
     }
     const users = await this.userModel.find();
     const books = await this.bookModel.find().populate('book_title').exec();
-    const records = DataFactory.createForClass(BorrowRecord).generate(100);
+    const records = DataFactory.createForClass(BorrowRecord).generate(100000);
     records.forEach(async (record) => {
       const randomLibrarian = librarianUsers[Math.floor(Math.random() * librarianUsers.length)];
       const randomUser = users[Math.floor(Math.random() * users.length)];
