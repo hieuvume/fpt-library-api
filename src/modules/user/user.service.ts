@@ -62,4 +62,8 @@ export class UserService {
     const newPassword = await bcrypt.hash(new_password, 10);
     return this.userRepository.updatePassword(user._id, newPassword);
   }
+
+  async findAll() {
+    return this.userRepository.findAll();
+  }
 }

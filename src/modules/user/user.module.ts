@@ -6,12 +6,13 @@ import { User, UserSchema } from "./user.schema";
 import { RoleModule } from "modules/role/role.module";
 import { UserController } from "./user.controller";
 import { BookModule } from "modules/book/book.module";
+import { UserDashboardController } from "./user.dashboard.controller";
 
 
 @Global()
 @Module({
   imports: [MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]), RoleModule,BookModule],
-  controllers: [UserController],
+  controllers: [UserController, UserDashboardController],
   providers: [UserService, UserRepository],
   exports: [UserRepository]
 })
