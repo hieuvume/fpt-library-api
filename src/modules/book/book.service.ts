@@ -54,7 +54,12 @@ export class BookService {
 
         );
     }
-    
+    async findBooksByTitleId(bookTitleId: string) {
+        if (!isValidObjectId(bookTitleId)) {
+            throw new BadRequestException('Invalid ID format');
+        }
+        return this.bookRepository.findBooksByTitleId(bookTitleId); // Fetch books by title ID
+    }
     async update(id: string, book: UpdateBookDto) {
         return this.bookRepository.update(id, book); // Update book by ID
     }

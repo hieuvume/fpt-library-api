@@ -22,7 +22,6 @@ export class BookTitleController {
   async getBookById(@Param("id") id) {
     return this.bookTitleService.getBookById(id);
   }
-
   @Post("add")
   async addBook(@Body() book) {}
 }

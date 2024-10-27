@@ -1,10 +1,10 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import {
   BookTitle,
   BookTitleDocument,
 } from "modules/book-title/book-title.schema";
-import { PaginateModel, PaginateResult } from "mongoose";
+import mongoose, { PaginateModel, PaginateResult, Types } from "mongoose";
 
 @Injectable()
 export class BookTitleRepository {
@@ -44,4 +44,36 @@ export class BookTitleRepository {
       }
     );
   }
+  async findFeedbacksByTitleId(bookTitleId: string, page: number = 1, pageSize: number = 10) {
+    return this.bookTitleModel.paginate(
+      { _id: bookTitleId }, 
+      {
+        page,
+        limit: pageSize,
+        populate: {
+          path: 'feedbacks',
+          populate: {
+            path: 'user',
+            select: '_id full_name avatar_url', 
+          },
+        },
+        select: '-_id feedbacks',
+      },
+    );
+  }
+  
+  async addFeedbackToBookTitle(bookTitleId: string, feedbackId: string): Promise<BookTitle> {
+    const bookTitle = await this.bookTitleModel.findByIdAndUpdate(
+      bookTitleId,
+      { $addToSet: { feedbacks: new Types.ObjectId(feedbackId) } },
+      { new: true }, 
+    );
+
+    if (!bookTitle) {
+      throw new NotFoundException('Book title not found');
+    }
+
+    return bookTitle;
+  }
+
 }

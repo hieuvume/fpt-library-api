@@ -11,5 +11,7 @@ import { BookTitleController } from "./book-title.controller";
   imports: [MongooseModule.forFeature([{ name: BookTitle.name, schema: BookTitleSchema }])],
   controllers: [BookTitleController],
   providers: [BookTitleService, BookTitleRepository],
+  exports: [BookTitleService, BookTitleRepository],
+  
 })
 export class BookTitleModule { }

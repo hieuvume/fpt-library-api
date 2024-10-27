@@ -1,14 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import mongoose, { Model, Types } from 'mongoose';
 import { BorrowRecord, BorrowRecordDocument } from './borrow-record.schema';
 import { type } from 'os';
 import { populate } from 'dotenv';
 import path from 'path';
+import { Book } from 'modules/book/book.schema';
 
 @Injectable()
 export class BorrowRecordRepository {
-  constructor(@InjectModel(BorrowRecord.name) private borrowRecordModel: Model<BorrowRecordDocument>) { }
+  constructor(
+    @InjectModel(BorrowRecord.name) private borrowRecordModel: Model<BorrowRecordDocument>,
+) { }
 
   async findAll(): Promise<BorrowRecord[]> {
     return this.borrowRecordModel.find().exec();
@@ -91,7 +94,7 @@ export class BorrowRecordRepository {
       {
         // Định dạng lại kết quả trả về
         $project: {
-          _id: 0, // Bỏ _id mặc định
+          _id: 1, // Bỏ _id mặc định
           book_title_name: "$book_info.title", // Lấy tiêu đề sách từ book_info
           author: "$book_info.author", // Lấy tác giả từ book_info
           cover_image: "$book_info.cover_image", // Lấy hình bìa từ book_info
@@ -101,5 +104,15 @@ export class BorrowRecordRepository {
     ]).exec();
 
   }
-
+  async findOneByUserAndBook(
+    userId: string,
+    bookId: string,
+    isReturned: boolean = true,
+  ): Promise<BorrowRecord | null> {
+    return this.borrowRecordModel.findOne({
+      user: new mongoose.Types.ObjectId(userId),
+      book: new mongoose.Types.ObjectId(bookId),
+      is_returned: isReturned,
+    }).exec();
+  }
 }

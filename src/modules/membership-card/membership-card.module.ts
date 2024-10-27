@@ -13,6 +13,7 @@ import { MembershipCardRepository } from "./membership-card.repository";
   imports: [MongooseModule.forFeature([{ name: MembershipCard.name, schema: MembershipCardSchema }]), ],
   controllers: [MembershipCardController],
   providers: [MembershipCardService, MembershipCardRepository],
+  exports: [MembershipCardService, MembershipCardRepository],
 
 })
 export class MembershipCardModule { }

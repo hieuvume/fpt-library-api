@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { MembershipCard, MembershipCardDocument } from './membership-card.schema';
 
 @Injectable()
@@ -18,5 +18,10 @@ export class MembershipCardRepository {
 
   async findById(id: string): Promise<MembershipCard> {
     return this.membershipCardModel.findById(id).exec();
+  }
+  async findActiveCardByUserId(userId: string): Promise<MembershipCard | null> {
+    return this.membershipCardModel.findOne({
+      user_id: new Types.ObjectId(userId),
+    }).exec();
   }
 }
