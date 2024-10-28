@@ -26,7 +26,7 @@ export class BorrowRecord {
   @Type(() => BookTitle)
   book_title: BookTitle;
 
-  @Prop({ type: Types.ObjectId, ref: User.name, required: true })
+  @Prop({ type: Types.ObjectId, ref: User.name, })
   @Type(() => User)
   librarian: User;
 

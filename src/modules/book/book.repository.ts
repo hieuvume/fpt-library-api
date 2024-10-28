@@ -1,8 +1,9 @@
 import { InjectModel } from '@nestjs/mongoose';
-import mongoose, { Model } from 'mongoose';
+import mongoose, { Model, Types } from 'mongoose';
 import { Book } from './book.schema';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
+import { log } from 'console';
 
 export class BookRepository {
   constructor(@InjectModel(Book.name) private readonly bookModel: Model<Book>) { }
@@ -108,5 +109,20 @@ export class BookRepository {
   
   async findBooksByTitleIds(bookTitleId: string) {
     return this.bookModel.find({ book_title: new mongoose.Types.ObjectId(bookTitleId) }).exec();
+  }
+  async findRandomAvailableCopy(bookTitleId: string): Promise<any | null> {
+    const availableCopies = await this.bookModel.aggregate([
+      { $match: { book_title: new Types.ObjectId(bookTitleId), status: 'available' } },
+      { $sample: { size: 1 } },
+    ]);
+    
+    return availableCopies[0] || null;
+  }
+
+  async updateCopyStatus(copyId: Types.ObjectId, status: string) {
+    return this.bookModel.updateOne(
+      { _id: copyId },
+      { $set: { status: status } },
+    );
   }
 }

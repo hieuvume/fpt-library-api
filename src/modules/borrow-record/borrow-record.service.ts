@@ -37,4 +37,7 @@ export class BorrowRecordService {
     return null;
   }
 
+  async findAllLoans(page: number, limit: number) {
+    return this.borrowRecordRepository.findAllLoans(page, limit);
+  }
 }

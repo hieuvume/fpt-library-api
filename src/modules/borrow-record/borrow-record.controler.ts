@@ -1,12 +1,15 @@
 import {
+  Body,
   Controller,
   Get,
+  Post,
   Query,
   Req,
   UseGuards
 } from "@nestjs/common";
 import { AuthGuard } from "modules/auth/guards/auth.guard";
 import { BorrowRecordService } from "./borrow-record.service";
+import { MembershipGuard } from "modules/membership-card/guards/membership.guard";
 
 
 @Controller("borrow-records")
@@ -40,4 +43,6 @@ export class BorrowRecordController {
       order
     );
   }
+
+  
 }
