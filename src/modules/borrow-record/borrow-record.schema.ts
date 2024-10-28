@@ -1,16 +1,16 @@
-import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { Transform, Type } from 'class-transformer';
-import { BookTitle } from 'modules/book-title/book-title.schema';
-import { Book } from 'modules/book/book.schema';
-import { User } from 'modules/user/user.schema';
-import { Document, Types } from 'mongoose';
-import { Factory } from 'nestjs-seeder';
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Transform, Type } from "class-transformer";
+import { BookTitle } from "modules/book-title/book-title.schema";
+import { Book } from "modules/book/book.schema";
+import { User } from "modules/user/user.schema";
+import { Document, Types } from "mongoose";
+import * as mongoosePaginate from "mongoose-paginate-v2";
+import { Factory } from "nestjs-seeder";
 
 export type BorrowRecordDocument = BorrowRecord & Document;
 
 @Schema()
 export class BorrowRecord {
-
   @Transform(({ value }) => value.toString())
   _id: Types.ObjectId;
 
@@ -26,12 +26,24 @@ export class BorrowRecord {
   @Type(() => BookTitle)
   book_title: BookTitle;
 
-  @Factory(() => '')
-  @Prop({ })
+  @Prop({ type: Types.ObjectId, ref: User.name, required: true })
+  @Type(() => User)
+  librarian: User;
+
+  @Factory(() => "pending")
+  @Prop()
+  status: string; // [pending, approved, rejected, returned, losted]
+
+  @Factory(() => "")
+  @Prop()
+  note: string
+
+  @Factory(() => "")
+  @Prop({})
   before_status: string;
 
-  @Factory(() => 'Bình thường')
-  @Prop({ })
+  @Factory(() => "Bình thường")
+  @Prop({})
   after_status: string;
 
   @Factory(() => {
@@ -51,7 +63,6 @@ export class BorrowRecord {
   })
   @Prop({ required: true })
   due_date: Date;
-
   @Factory(() => {
     const days = Math.floor(Math.random() * 10) + 5;
     const date = new Date();
@@ -72,3 +83,4 @@ export class BorrowRecord {
 }
 
 export const BorrowRecordSchema = SchemaFactory.createForClass(BorrowRecord);
+BorrowRecordSchema.plugin(mongoosePaginate);

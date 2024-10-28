@@ -14,7 +14,7 @@ import { RoleModule } from "modules/role/role.module";
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: "900s" },
+      signOptions: { expiresIn: "9000s" },
     }),
   ],
   controllers: [AuthController],

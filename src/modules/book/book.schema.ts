@@ -13,7 +13,7 @@ export class Book {
   _id: Types.ObjectId;
 
   @Factory(() => new Types.ObjectId())
-  @Prop({ type: Types.ObjectId, ref: BookTitle.name, required: true })
+  @Prop({ type: Types.ObjectId, ref: 'BookTitle', required: true })
   book_title: BookTitle;
 
   @Factory(faker => faker.string.uuid())
@@ -23,7 +23,7 @@ export class Book {
   @Factory(faker => faker.string.alphanumeric(3))
   @Prop({ required: true })
   section: string;
-
+  
   @Factory(faker => faker.string.alphanumeric(3))
   @Prop({ required: true })
   shelf: string;
@@ -38,7 +38,7 @@ export class Book {
 
   @Factory(() => 'available')
   @Prop({ required: true })
-  status: string;
+  status: string; // [available, borrowed, losted]
 
   @Factory(faker => faker.number.int({ min: 1, max: 10 }))
   @Prop()

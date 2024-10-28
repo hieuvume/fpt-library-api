@@ -19,4 +19,9 @@ export class MembershipRepository {
   async findById(id: string): Promise<Membership> {
     return this.membershipModel.findById(id).exec();
   }
+
+  async findDefaultMembership(): Promise<Membership> {
+    return this.membershipModel.findOne().exec();
+  }
+
 }

@@ -1,15 +1,20 @@
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
+import { Type } from "class-transformer";
+import { Membership } from "modules/membership/membership.schema";
+import { User } from "modules/user/user.schema";
 import { Document, Types } from "mongoose";
 
 export type MembershipCardDocument = MembershipCard & Document;
 
 @Schema()
 export class MembershipCard {
-  @Prop({ type: Types.ObjectId, ref: "User", required: true })
-  user_id: Types.ObjectId;
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
+  @Type(() => User)
+  user: User;
 
   @Prop({ type: Types.ObjectId, ref: "Membership", required: true })
-  membership_id: Types.ObjectId;
+  @Type(() => Membership)
+  membership: Membership;
 
   @Prop({ required: true })
   card_number: string;
@@ -17,14 +22,14 @@ export class MembershipCard {
   @Prop({ required: true })
   start_date: Date;
 
-  @Prop({ required: true })
+  @Prop({})
   end_date: Date;
 
   @Prop({ required: true })
   price: number;
 
   @Prop({ required: true })
-  status: string;
+  status: string; // active, inactive, expired
 
   @Prop()
   created_at: Date;

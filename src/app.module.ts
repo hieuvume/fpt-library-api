@@ -4,20 +4,19 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { MailModule } from "mail/mail.module";
 import { AuthModule } from "modules/auth/auth.module";
 import { BookTitleModule } from "modules/book-title/book-title.module";
-import { BookTitle, BookTitleSchema } from "modules/book-title/book-title.schema";
 import { BookModule } from "modules/book/book.module";
 import { BorrowRecordModule } from "modules/borrow-record/borrow-record.module";
 import { CategoryModule } from "modules/category/category.module";
+import { MembershipCardModule } from "modules/membership-card/membership-card.module";
+import { MembershipModule } from "modules/membership/membership.module";
+import { NewsModule } from "modules/news/news.module";
 import { ResetPasswordModule } from "modules/reset-password/reset-password.module";
 import { RoleModule } from "modules/role/role.module";
 import { SettingModule } from "modules/setting/setting.module";
 import { UserModule } from "modules/user/user.module";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { Book, BookSchema } from "modules/book/book.schema";
-import { BorrowRecord, BorrowRecordSchema } from "modules/borrow-record/borrow-record.schema";
-import { Category, CategorySchema } from "modules/category/category.schema";
-import { Membership, MembershipSchema } from "modules/membership/membership.schema";
+import { FeedbackModule } from "modules/feedback/feedback.module";
 
 @Module({
   imports: [
@@ -25,9 +24,9 @@ import { Membership, MembershipSchema } from "modules/membership/membership.sche
       isGlobal: true, // no need to import into other modules
     }),
     MongooseModule.forRoot("mongodb://localhost:27017", {
-      user: 'root',
-      dbName: 'library',
-      pass: '123456',
+      user: "root",
+      dbName: "library",
+      pass: "123456",
     }),
     MailModule,
     SettingModule,
@@ -38,11 +37,13 @@ import { Membership, MembershipSchema } from "modules/membership/membership.sche
     ResetPasswordModule,
     RoleModule,
     BookTitleModule,
-    BorrowRecordModule
+    BorrowRecordModule,
+    NewsModule,
+    MembershipModule,
+    MembershipCardModule,
+    FeedbackModule,
   ],
-  providers: [
-    AppService,
-  ],
-  controllers: [AppController]
+  providers: [AppService],
+  controllers: [AppController],
 })
-export class AppModule { }
+export class AppModule {}
