@@ -32,7 +32,7 @@ export class BorrowRecord {
 
   @Factory(() => "pending")
   @Prop()
-  status: string; // [pending, approved, rejected, returned, losted]
+  status: string; // [pending, holding, borrowing, rejected, returned, losted]
 
   @Factory(() => "")
   @Prop()

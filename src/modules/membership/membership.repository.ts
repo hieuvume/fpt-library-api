@@ -7,7 +7,7 @@ import { Membership, MembershipDocument } from './membership.schema';
 export class MembershipRepository {
   constructor(@InjectModel(Membership.name) private membershipModel: Model<MembershipDocument>) {}
 
-  async findAll(): Promise<Membership[]> {
+  async findAll() {
     return this.membershipModel.find().exec();
   }
 

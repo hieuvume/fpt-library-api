@@ -1,27 +1,32 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
+import { BookRepository } from "modules/book/book.repository";
+import { Role } from "modules/role/role.schema";
 import { Model, ObjectId } from "mongoose";
 import { User, UserDocument } from "./user.schema";
-import { Role } from "modules/role/role.schema";
-import path from "path";
-import { Book, BookDocument } from "modules/book/book.schema";
-import { BookRepository } from "modules/book/book.repository";
-import { UserDto } from "./dto/user.dto";
 
 @Injectable()
 export class UserRepository {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private readonly bookRepository: BookRepository
-  ) {}
+  ) { }
 
   async findAll(): Promise<User[]> {
     return this.userModel.find().exec();
   }
 
+  async getProfile(id: string): Promise<User> {
+    return this.userModel.findById(id).populate([
+      { path: "role" },
+      { path: "current_membership", populate: { path: "membership" } },
+    ]).exec();
+  }
+
   async findById(id: string): Promise<User> {
     return this.userModel.findById(id).populate("role");
   }
+
   async findUserById(id: string): Promise<User> {
     return this.userModel
       .findById(id)

@@ -1,14 +1,12 @@
 import { Injectable } from "@nestjs/common";
-import { Seeder, DataFactory } from "nestjs-seeder";
+import { Seeder } from "nestjs-seeder";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import * as bcrypt from "bcryptjs";
+import { randomUUID } from "crypto";
 import { Role } from "modules/role/role.schema";
-import { faker } from "@faker-js/faker";
 import { MembershipCard } from "modules/membership-card/membership-card.schema";
 import { Membership } from "modules/membership/membership.schema";
 import { User } from "modules/user/user.schema";
-import { randomUUID } from "crypto";
 
 @Injectable()
 export class MembershipCardSeeder implements Seeder {
@@ -22,20 +20,24 @@ export class MembershipCardSeeder implements Seeder {
     const users = await this.userModel.find({});
     const defaultMembership = await this.membershipModel.findOne({});
 
-    const cards = []
-    users.map((user) => {
-      cards.push({
+    const nextMonth = new Date();
+    nextMonth.setMonth(nextMonth.getMonth() + 1);
+    for (const user of users) {
+      const card = new this.membershipCardModel({
         user: user._id,
         membership: defaultMembership._id,
         card_number: randomUUID(),
         start_date: new Date(),
+        end_date: nextMonth,
+        billing_cycle: "monthly",
         price: 0,
         status: "active",
         created_at: new Date()
-      })
-    });
+      });
 
-    return this.membershipCardModel.insertMany(cards);
+      await card.save();
+      await this.userModel.updateOne({ _id: user._id }, { current_membership: card._id });
+    }
   }
 
   async drop(): Promise<any> {

@@ -48,12 +48,12 @@ seeder({
   ],
 }).run([
   UserSeeder,
+  MembershipSeeder,
+  MembershipCardSeeder,
   CategorySeeder,
   BookTitleSeeder,
   BookSeeder,
   BorrowRecordSeeder,
   NewsSeeder,
   FeedbackSeeder,
-  MembershipSeeder,
-  MembershipCardSeeder
 ]);

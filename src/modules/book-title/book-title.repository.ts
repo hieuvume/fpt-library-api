@@ -4,14 +4,14 @@ import {
   BookTitle,
   BookTitleDocument,
 } from "modules/book-title/book-title.schema";
-import mongoose, { PaginateModel, PaginateResult, Types } from "mongoose";
+import mongoose, { ObjectId, PaginateModel, PaginateResult, Types } from "mongoose";
 
 @Injectable()
 export class BookTitleRepository {
   constructor(
     @InjectModel(BookTitle.name)
     private bookTitleModel: PaginateModel<BookTitleDocument>
-  ) {}
+  ) { }
 
   async findAll(): Promise<BookTitle[]> {
     return this.bookTitleModel.find().exec();
@@ -44,9 +44,10 @@ export class BookTitleRepository {
       }
     );
   }
+
   async findFeedbacksByTitleId(bookTitleId: string, page: number = 1, pageSize: number = 10) {
     return this.bookTitleModel.paginate(
-      { _id: bookTitleId }, 
+      { _id: bookTitleId },
       {
         page,
         limit: pageSize,
@@ -54,19 +55,19 @@ export class BookTitleRepository {
           path: 'feedbacks',
           populate: {
             path: 'user',
-            select: '_id full_name avatar_url', 
+            select: '_id full_name avatar_url',
           },
         },
         select: '-_id feedbacks',
       },
     );
   }
-  
+
   async addFeedbackToBookTitle(bookTitleId: string, feedbackId: string): Promise<BookTitle> {
     const bookTitle = await this.bookTitleModel.findByIdAndUpdate(
       bookTitleId,
       { $addToSet: { feedbacks: new Types.ObjectId(feedbackId) } },
-      { new: true }, 
+      { new: true },
     );
 
     if (!bookTitle) {
@@ -74,6 +75,12 @@ export class BookTitleRepository {
     }
 
     return bookTitle;
+  }
+
+  async countByMembershipId(membershipId: ObjectId): Promise<number> {
+    return this.bookTitleModel.countDocuments({
+      memberships: membershipId,
+    }).exec();
   }
 
 }

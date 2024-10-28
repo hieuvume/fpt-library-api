@@ -14,6 +14,9 @@ export class Membership {
   name: string;
 
   @Prop({ required: true })
+  description: string;
+
+  @Prop({ required: true })
   price_monthly: number;
 
   @Prop({ required: true })
@@ -27,6 +30,12 @@ export class Membership {
 
   @Prop({ required: true })
   max_reserve_books_per_montly: number;
+
+  @Prop({ required: true })
+  renewal_allowed: boolean;
+
+  @Prop({ required: true })
+  hold_allowed: boolean;
 
   @Prop()
   color: string;

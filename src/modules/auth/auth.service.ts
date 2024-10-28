@@ -70,7 +70,7 @@ export class AuthService {
   }
 
   async getProfile(id: string) {
-    const user = await this.userRepository.findById(id);
+    const user = await this.userRepository.getProfile(id);
     if (!user) {
       throw new UnauthorizedException();
     }
