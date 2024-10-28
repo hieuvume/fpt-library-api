@@ -20,10 +20,9 @@ export class BorrowRecordRepository {
     return this.borrowRecordModel.findById(id).exec();
   }
 
-  async findBestBookTitleOfTheMonth() {
-    
-    const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-    const endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+  async findBestBookTitleOfTheMonth(subMonth: number) {
+    const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() - subMonth, 1);
+    const endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() - subMonth + 1, 0);
 
     // Truy vấn để tìm sách "Best Of The Month"
     return this.borrowRecordModel.aggregate([
@@ -37,16 +36,16 @@ export class BorrowRecordRepository {
         $group: {
           // Nhóm theo `book_title` (book_title là ObjectId)
           _id: "$book_title",
-          totalBorrows: { $sum: 1 }, // Đếm số lượt mượn
+          total_borrows: { $sum: 1 }, // Đếm số lượt mượn
         },
       },
       {
         // Sắp xếp theo số lần mượn giảm dần
-        $sort: { totalBorrows: -1 },
+        $sort: { total_borrows: -1 },
       },
       {
         // Lấy 5 cuốn sách được mượn nhiều nhất
-        $limit: 5,
+        $limit: 15,
       },
       {
         // Sử dụng $lookup để lấy thông tin từ bảng BookTitle
@@ -64,11 +63,11 @@ export class BorrowRecordRepository {
       {
         // Định dạng lại kết quả trả về
         $project: {
-          _id: 0, // Bỏ _id mặc định
+          _id: "$book_info._id", // Bỏ _id mặc định
           book_title_name: "$book_info.title", // Lấy tiêu đề sách từ book_info
           author: "$book_info.author", // Lấy tác giả từ book_info
           cover_image: "$book_info.cover_image", // Lấy hình bìa từ book_info
-          totalBorrows: 1, // Giữ lại tổng số lượt mượn
+          total_borrows: 1, // Giữ lại tổng số lượt mượn
         },
       },
     ]).exec();

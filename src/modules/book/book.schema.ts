@@ -2,11 +2,16 @@ import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
 import { Factory } from "nestjs-seeder";
 import { BookTitle } from "modules/book-title/book-title.schema";
+import { Transform } from "class-transformer";
 
 export type BookDocument = Book & Document;
 
 @Schema()
 export class Book {
+
+  @Transform(({ value }) => value.toString())
+  _id: Types.ObjectId;
+
   @Factory(() => new Types.ObjectId())
   @Prop({ type: Types.ObjectId, ref: BookTitle.name, required: true })
   book_title: BookTitle;
