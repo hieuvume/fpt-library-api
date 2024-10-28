@@ -1,14 +1,24 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
-import { MembershipCard, MembershipCardDocument } from './membership-card.schema';
+import { Injectable } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model, ObjectId, Types } from "mongoose";
+import {
+  MembershipCard,
+  MembershipCardDocument,
+} from "./membership-card.schema";
 
 @Injectable()
 export class MembershipCardRepository {
-  constructor(@InjectModel(MembershipCard.name) private membershipCardModel: Model<MembershipCardDocument>) {}
+  constructor(
+    @InjectModel(MembershipCard.name)
+    private membershipCardModel: Model<MembershipCardDocument>
+  ) {}
 
   async findAll(): Promise<MembershipCard[]> {
     return this.membershipCardModel.find().exec();
+  }
+
+  async update(id: string, data: any): Promise<MembershipCard> {
+    return this.membershipCardModel.findByIdAndUpdate(id, data, { new: true });
   }
 
   async create(data: any): Promise<MembershipCard> {
@@ -19,9 +29,13 @@ export class MembershipCardRepository {
   async findById(id: string): Promise<MembershipCard> {
     return this.membershipCardModel.findById(id).exec();
   }
-  async findActiveCardByUserId(userId: string): Promise<MembershipCard | null> {
-    return this.membershipCardModel.findOne({
-      user_id: new Types.ObjectId(userId),
-    }).exec();
+
+  async findByUserId(userId: string): Promise<MembershipCard | null> {
+    return this.membershipCardModel
+      .findOne({
+        user_id: new Types.ObjectId(userId),
+      })
+      .populate("membership")
+      .exec();
   }
 }

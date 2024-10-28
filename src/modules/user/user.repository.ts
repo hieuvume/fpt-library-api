@@ -4,23 +4,27 @@ import { BookRepository } from "modules/book/book.repository";
 import { Role } from "modules/role/role.schema";
 import { Model, ObjectId } from "mongoose";
 import { User, UserDocument } from "./user.schema";
+import { MembershipCard } from "modules/membership-card/membership-card.schema";
 
 @Injectable()
 export class UserRepository {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private readonly bookRepository: BookRepository
-  ) { }
+  ) {}
 
   async findAll(): Promise<User[]> {
     return this.userModel.find().exec();
   }
 
   async getProfile(id: string): Promise<User> {
-    return this.userModel.findById(id).populate([
-      { path: "role" },
-      { path: "current_membership", populate: { path: "membership" } },
-    ]).exec();
+    return this.userModel
+      .findById(id)
+      .populate([
+        { path: "role" },
+        { path: "current_membership", populate: { path: "membership" } },
+      ])
+      .exec();
   }
 
   async findById(id: string): Promise<User> {
@@ -34,7 +38,7 @@ export class UserRepository {
       .populate({
         path: "current_membership",
         populate: {
-          path: "membership_id",
+          path: "membership",
         },
       })
       .exec();
@@ -61,5 +65,11 @@ export class UserRepository {
 
   async updateUser(id: string, data: any) {
     return this.userModel.findByIdAndUpdate({ _id: id }, data).exec();
+  }
+
+  async updateCurrentMembership(userId: string, membershipCard: MembershipCard) {
+    return this.userModel
+      .updateOne({ _id: userId }, { current_membership: membershipCard._id })
+      .exec();
   }
 }
