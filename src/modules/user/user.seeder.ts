@@ -6,12 +6,16 @@ import { User } from "./user.schema";
 import * as bcrypt from "bcryptjs";
 import { Role } from "modules/role/role.schema";
 import { faker } from "@faker-js/faker";
+import { MembershipCard } from "modules/membership-card/membership-card.schema";
+import { Membership } from "modules/membership/membership.schema";
 
 @Injectable()
 export class UserSeeder implements Seeder {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
-    @InjectModel(Role.name) private readonly roleModel: Model<Role>
+    @InjectModel(Role.name) private readonly roleModel: Model<Role>,
+    @InjectModel(MembershipCard.name) private readonly membershipCardModel: Model<MembershipCard>,
+    @InjectModel(Membership.name) private readonly membershipModel: Model<Membership>
   ) {}
 
   async seed(): Promise<any> {
@@ -20,6 +24,7 @@ export class UserSeeder implements Seeder {
     const librarianRole = await this.roleModel.findOne({
       role_name: "LIBRARIAN",
     });
+    const defaultMembership = await this.membershipModel.findOne({});
     this.userModel.create({
       email: "admin@readora.me",
       password: bcrypt.hashSync("123123", 10),

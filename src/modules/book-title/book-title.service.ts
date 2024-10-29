@@ -9,8 +9,8 @@ export class BookTitleService {
     private readonly borrowRecordRepository: BorrowRecordRepository
   ) {}
 
-  async findBestOfTheMonth() {
-    return this.borrowRecordRepository.findBestBookTitleOfTheMonth();
+  async findBestOfTheMonth(subMonth: number) {
+    return this.borrowRecordRepository.findBestBookTitleOfTheMonth(subMonth);
   }
 
   async searchByKeyword(keyword: string, page: number, limit: number) {

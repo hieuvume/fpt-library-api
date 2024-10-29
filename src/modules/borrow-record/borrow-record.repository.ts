@@ -59,17 +59,10 @@ export class BorrowRecordRepository {
     return this.borrowRecordModel.findById(id).exec();
   }
 
-  async findBestBookTitleOfTheMonth() {
-    const startOfMonth = new Date(
-      new Date().getFullYear(),
-      new Date().getMonth(),
-      1
-    );
-    const endOfMonth = new Date(
-      new Date().getFullYear(),
-      new Date().getMonth() + 1,
-      0
-    );
+  async findBestBookTitleOfTheMonth(subMonth: number) {
+    const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() - subMonth, 1);
+    const endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() - subMonth + 1, 0);
+
     return this.borrowRecordModel
       .aggregate([
         {
@@ -108,7 +101,7 @@ export class BorrowRecordRepository {
         {
 
           $project: {
-            _id: 1, // Bỏ _id mặc định
+            _id: "$book_info._id", // Bỏ _id mặc định
             book_title_name: "$book_info.title",
             author: "$book_info.author",
             cover_image: "$book_info.cover_image",
@@ -118,6 +111,7 @@ export class BorrowRecordRepository {
       ])
       .exec();
   }
+
   async findOneByUserAndBook(
     userId: string,
     bookId: string,

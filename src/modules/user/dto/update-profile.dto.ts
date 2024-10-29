@@ -1,13 +1,10 @@
 import {
-  IsString,
-  IsInt,
-  IsEmail,
-  Length,
-  Min,
-  Matches,
+  IsDateString,
   IsEnum,
   IsOptional,
-  IsDate,
+  IsString,
+  Length,
+  Matches
 } from "class-validator";
 
 export class UpdateProfileDto {
@@ -32,6 +29,6 @@ export class UpdateProfileDto {
   address: string;
 
   @IsOptional()
-  @IsDate()
+  @IsDateString()
   date_of_birth: Date;
 }

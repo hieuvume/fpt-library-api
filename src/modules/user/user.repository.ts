@@ -1,12 +1,10 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
+import { BookRepository } from "modules/book/book.repository";
+import { Role } from "modules/role/role.schema";
 import { Model, ObjectId } from "mongoose";
 import { User, UserDocument } from "./user.schema";
-import { Role } from "modules/role/role.schema";
-import path from "path";
-import { Book, BookDocument } from "modules/book/book.schema";
-import { BookRepository } from "modules/book/book.repository";
-import { UserDto } from "./dto/user.dto";
+import { MembershipCard } from "modules/membership-card/membership-card.schema";
 
 @Injectable()
 export class UserRepository {
@@ -19,17 +17,28 @@ export class UserRepository {
     return this.userModel.find().exec();
   }
 
+  async getProfile(id: string): Promise<User> {
+    return this.userModel
+      .findById(id)
+      .populate([
+        { path: "role" },
+        { path: "current_membership", populate: { path: "membership" } },
+      ])
+      .exec();
+  }
+
   async findById(id: string): Promise<User> {
     return this.userModel.findById(id).populate("role");
   }
+
   async findUserById(id: string): Promise<User> {
     return this.userModel
       .findById(id)
       .populate("role")
       .populate({
-        path: "current_membership_id",
+        path: "current_membership",
         populate: {
-          path: "membership_id",
+          path: "membership",
         },
       })
       .exec();
@@ -56,5 +65,11 @@ export class UserRepository {
 
   async updateUser(id: string, data: any) {
     return this.userModel.findByIdAndUpdate({ _id: id }, data).exec();
+  }
+
+  async updateCurrentMembership(userId: string, membershipCard: MembershipCard) {
+    return this.userModel
+      .updateOne({ _id: userId }, { current_membership: membershipCard._id })
+      .exec();
   }
 }

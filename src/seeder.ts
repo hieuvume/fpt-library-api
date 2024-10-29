@@ -23,6 +23,8 @@ import { Feedback, FeedbackSchema } from "modules/feedback/feedback.schema";
 import { FeedbackSeeder } from "modules/feedback/feedback.seeder";
 import { MembershipSeeder } from "modules/membership/membership.seeder";
 import { Membership, MembershipSchema } from "modules/membership/membership.schema";
+import { MembershipCard, MembershipCardSchema } from "modules/membership-card/membership-card.schema";
+import { MembershipCardSeeder } from "modules/membership-card/membership-card.seeder";
 
 seeder({
   imports: [
@@ -41,15 +43,17 @@ seeder({
       { name: News.name, schema: NewsSchema },
       { name: Feedback.name, schema: FeedbackSchema },
       { name: Membership.name, schema: MembershipSchema },
+      { name: MembershipCard.name, schema: MembershipCardSchema },
     ]),
   ],
 }).run([
   UserSeeder,
+  MembershipSeeder,
+  MembershipCardSeeder,
   CategorySeeder,
   BookTitleSeeder,
   BookSeeder,
   BorrowRecordSeeder,
   NewsSeeder,
   FeedbackSeeder,
-  MembershipSeeder
 ]);

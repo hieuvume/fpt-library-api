@@ -1,12 +1,20 @@
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from "mongoose";
+import { Transform } from "class-transformer";
+import { Document, ObjectId } from "mongoose";
 
 export type MembershipDocument = Membership & Document;
 
 @Schema()
 export class Membership {
+
+  @Transform(({ value }) => value.toString())
+  _id: ObjectId;
+
   @Prop({ required: true })
   name: string;
+
+  @Prop({ required: true })
+  description: string;
 
   @Prop({ required: true })
   price_monthly: number;
@@ -22,6 +30,12 @@ export class Membership {
 
   @Prop({ required: true })
   max_reserve_books_per_montly: number;
+
+  @Prop({ required: true })
+  renewal_allowed: boolean;
+
+  @Prop({ required: true })
+  hold_allowed: boolean;
 
   @Prop()
   color: string;

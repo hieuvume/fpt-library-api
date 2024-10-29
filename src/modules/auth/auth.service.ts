@@ -4,6 +4,7 @@ import {
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt"; // Sử dụng nếu bạn dùng JWT
 import * as bcrypt from "bcryptjs";
+import { MembershipCardService } from "modules/membership-card/membership-card.service";
 import { RoleRepository } from "modules/role/role.repository";
 import { UserRepository } from "modules/user/user.repository";
 import { badMessage } from "utils/helpers";
@@ -14,6 +15,7 @@ export class AuthService {
     private userRepository: UserRepository,
     private roleRepository: RoleRepository,
     private jwtService: JwtService,
+    private membershipCardService: MembershipCardService
   ) { }
 
   async signUp(
@@ -38,8 +40,11 @@ export class AuthService {
       role: userRole,
     });
 
+    this.membershipCardService.initMembershipCard(newUser._id);
+
     const payload = { sub: newUser._id, email: newUser.email, id: newUser._id, role: newUser.role.role_name };
     const accessToken = await this.jwtService.signAsync(payload);
+    
     return {
       access_token: accessToken,
       user: newUser,
@@ -65,7 +70,7 @@ export class AuthService {
   }
 
   async getProfile(id: string) {
-    const user = await this.userRepository.findById(id);
+    const user = await this.userRepository.getProfile(id);
     if (!user) {
       throw new UnauthorizedException();
     }
@@ -86,6 +91,8 @@ export class AuthService {
         phone_number: null,
         role: userRole,
       });
+
+      this.membershipCardService.initMembershipCard(user._id);
     }
 
 

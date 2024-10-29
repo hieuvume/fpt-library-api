@@ -1,9 +1,14 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { MembershipService } from './membership.service';
 
-@Controller('roles')
+@Controller('membership')
 export class MembershipController {
-  constructor(private readonly membershipController: MembershipService) {}
+  constructor(private readonly membershipService: MembershipService) {}
+
+  @Get()
+  async findAll() {
+    return await this.membershipService.findAll();
+  }
 
 
 }

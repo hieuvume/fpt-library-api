@@ -14,7 +14,6 @@ export class MembershipGuard implements CanActivate {
       throw new ForbiddenException('User is not authenticated');
     }
 
-
     await this.membershipCardService.validateUserMembership(user.id);
 
     return true;

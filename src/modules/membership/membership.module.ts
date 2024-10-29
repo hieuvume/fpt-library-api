@@ -10,6 +10,6 @@ import { MembershipRepository } from "./membership.repository";
   imports: [MongooseModule.forFeature([{ name: Membership.name, schema: MembershipSchema }]), ],
   controllers: [MembershipController],
   providers: [MembershipService, MembershipRepository],
-
+  exports: [MembershipService, MembershipRepository],
 })
 export class MembershipModule { }

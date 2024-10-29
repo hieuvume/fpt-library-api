@@ -1,11 +1,11 @@
-import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
+import { Document, Types } from "mongoose";
 
 export type PaymentDocument = Payment & Document;
 
 @Schema()
 export class Payment {
-  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
+  @Prop({ type: Types.ObjectId, ref: "User", required: true })
   user_id: Types.ObjectId;
 
   @Prop({ required: true })
@@ -23,10 +23,10 @@ export class Payment {
   @Prop({ required: true })
   payment_date: Date;
 
-  @Prop({ required: true })
+  @Prop({ required: true, enum: ["pending", "completed", "failed"] })
   payment_status: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'MembershipCard' })
+  @Prop({ type: Types.ObjectId, ref: "MembershipCard" })
   membership_card_id: Types.ObjectId;
 
   @Prop()

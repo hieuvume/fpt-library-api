@@ -10,6 +10,7 @@ export type UserDocument = User & Document;
 
 @Schema()
 export class User {
+  @Factory(() => new Types.ObjectId())
   @Transform(({ value }) => value.toString())
   _id: ObjectId;
 
@@ -49,9 +50,9 @@ export class User {
   @Prop({ type: Object })
   id_card: object;
 
-  @Prop({ type: Types.ObjectId, ref: MembershipCard.name })
+  @Prop({ type: Types.ObjectId, ref: 'MembershipCard' })
   @Type(() => MembershipCard)
-  current_membership_id: MembershipCard;
+  current_membership: MembershipCard;
 
   @Prop({ type: [Types.ObjectId], ref: Book.name })
   @Type(() => Book)
