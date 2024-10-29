@@ -8,7 +8,7 @@ import { BookController } from './book.controller';
 @Global()
 @Module({
     imports: [MongooseModule.forFeature([{ name: Book.name, schema: BookSchema }])],
-    controllers: [BookController],
+    controllers: [BookController, BookDashboardController],
     providers: [BookService, BookRepository],
     exports:[BookRepository]
 })

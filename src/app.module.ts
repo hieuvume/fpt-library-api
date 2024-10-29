@@ -4,7 +4,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { MailModule } from "mail/mail.module";
 import { AuthModule } from "modules/auth/auth.module";
 import { BookTitleModule } from "modules/book-title/book-title.module";
-import { BookModule } from "modules/book/book.module";
+import { BookModule } from "modules/book/book.module"; // Ensure BookModule is imported
 import { BorrowRecordModule } from "modules/borrow-record/borrow-record.module";
 import { CategoryModule } from "modules/category/category.module";
 import { MembershipCardModule } from "modules/membership-card/membership-card.module";
@@ -21,7 +21,7 @@ import { FeedbackModule } from "modules/feedback/feedback.module";
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true, // no need to import into other modules
+      isGlobal: true,
     }),
     MongooseModule.forRoot("mongodb://localhost:27017", {
       user: "root",
@@ -30,7 +30,7 @@ import { FeedbackModule } from "modules/feedback/feedback.module";
     }),
     MailModule,
     SettingModule,
-    BookModule,
+    BookModule, 
     CategoryModule,
     UserModule,
     AuthModule,
@@ -43,7 +43,7 @@ import { FeedbackModule } from "modules/feedback/feedback.module";
     MembershipCardModule,
     FeedbackModule,
   ],
-  providers: [AppService],
   controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
