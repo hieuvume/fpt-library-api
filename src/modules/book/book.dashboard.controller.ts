@@ -29,6 +29,7 @@ export class BookDashboardController {
 
     @Delete(':id')
     async delete(@Param('id') id: string) {
-        return this.bookService.delete(id); // Delete book by ID
+        return this.bookService.delete(id); 
     }
+ 
 }

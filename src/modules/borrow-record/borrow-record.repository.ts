@@ -5,6 +5,7 @@ import { BorrowRecord, BorrowRecordDocument } from "./borrow-record.schema";
 import { type } from "os";
 import { populate } from "dotenv";
 import path from "path";
+import { types } from "util";
 
 @Injectable()
 export class BorrowRecordRepository {
@@ -21,7 +22,7 @@ export class BorrowRecordRepository {
     return this.borrowRecordModel
       .find({
         user: new Types.ObjectId(userId),
-        status: "approved",
+        status: { $in: ['pending', 'holding', 'borrowing'] },
       })
       .populate("book_title")
       .exec();
@@ -58,6 +59,26 @@ export class BorrowRecordRepository {
   async findById(id: string): Promise<BorrowRecord> {
     return this.borrowRecordModel.findById(id).exec();
   }
+  async findBorrowRecordByID(id: string): Promise<BorrowRecord> {
+    return this.borrowRecordModel.findById(id)
+      .populate([
+        {
+          path: 'user',
+          select: ['full_name', 'email', 'phone_number', 'address'],
+        },
+        {
+          path: 'book',
+          select: ['uniqueId', 'section', 'shelf', 'status','floor','position'],
+        },
+        {
+          path: 'book_title',
+          select : ['title', 'author', 'cover_image','description',]
+        },
+      ])
+      .exec();
+  }
+  
+  
 
   async findBestBookTitleOfTheMonth(subMonth: number) {
     const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() - subMonth, 1);
@@ -123,20 +144,21 @@ export class BorrowRecordRepository {
       is_returned: isReturned,
     }).exec();
   }
-  async createBorrowRecord(userId: string, bookId: string, bookTitleId: string): Promise<BorrowRecord> {
+  async createBorrowRecord(userId: string, bookId: string, bookTitleId: string,time:number): Promise<BorrowRecord> {
     const newBorrowRecord = new this.borrowRecordModel({
       user: new Types.ObjectId(userId),
       book: new Types.ObjectId(bookId),
       book_title: new Types.ObjectId(bookTitleId),
       borrow_date: new Date(),
-      due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      due_date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
       is_returned: false,
-      return_date: new Date(),
+      return_date: null,
       status: 'pending',
     });
     return newBorrowRecord.save();
 
   }
+
   async userHasBorrowedBookTitle(userId: string, bookTitleId: string): Promise<boolean> {
     const existingRecord = await this.borrowRecordModel.findOne({
       user: new Types.ObjectId(userId),
@@ -165,7 +187,7 @@ export class BorrowRecordRepository {
   async countActiveOrders(bookTitleId: string): Promise<number> {
     return this.borrowRecordModel.countDocuments({
       book_title: new Types.ObjectId(bookTitleId),
-      status: 'pending',
+      status: 'borrowing',
       is_returned: false,
     }).exec();
   }
@@ -192,9 +214,33 @@ export class BorrowRecordRepository {
     };
 
     return this.borrowRecordModel.paginate({
-      status: 'pending',
+      status: { $in: ['pending', 'holding', 'borrowing'] },
       is_returned: false,
     }, options);
   }
+  async countCurrentMonthBorrows(userId: string): Promise<number> {
+    const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+    return this.borrowRecordModel.countDocuments({
+      user: new Types.ObjectId(userId),
+      borrow_date: { $gte: startOfMonth }, 
+      status: { $in: ['pending', 'holding', 'borrowing'] },
+      is_returned: false,
+    }).exec();
+  }
   
+  async countMonthlyReserves(userId: string): Promise<number> {
+    const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+    return this.borrowRecordModel.countDocuments({
+      user: new Types.ObjectId(userId),
+      borrow_date: { $gte: startOfMonth },
+      status: { $in: ['pending', 'holding', 'borrowing','returned','losted'] },
+    }).exec();
+  }
+  async UpdateStatusBook(borrowId: string, status: string,time:number,requestUserId: string): Promise<BorrowRecord | null> {
+    return this.borrowRecordModel.findByIdAndUpdate(
+      borrowId,
+      { status, return_date: new Date(Date.now() + time * 24 * 60 * 60 * 1000),librarian:new Types.ObjectId(requestUserId) },
+      { new: true },
+    ).exec();
+  }
 }

@@ -44,7 +44,8 @@ export class BookController {
     @Req() req,
     @Body("bookTitleId") bookTitleId: string,
   ) {
-    return this.bookService.borrowBook(req.user.id, bookTitleId);
+    console.log(req.membershipCard);
+    return this.bookService.borrowBook(req.user.id, bookTitleId,req.membershipCard);
 
   }
 

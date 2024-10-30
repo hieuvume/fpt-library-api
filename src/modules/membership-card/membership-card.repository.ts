@@ -33,9 +33,11 @@ export class MembershipCardRepository {
   async findByUserId(userId: string): Promise<MembershipCard | null> {
     return this.membershipCardModel
       .findOne({
-        user_id: new Types.ObjectId(userId),
+        user: new Types.ObjectId(userId),
       })
       .populate("membership")
       .exec();
   }
+  
+  
 }

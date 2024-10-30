@@ -83,7 +83,7 @@ export class BookRepository {
             $sum: { $cond: [{ $eq: ['$status', 'available'] }, 1, 0] }
           },
           borrowedCount: {
-            $sum: { $cond: [{ $eq: ['$status', 'borrowed'] }, 1, 0] }
+            $sum: { $cond: [{ $eq: ['$status', 'borrowing'] }, 1, 0] }
           }
         }
       },
@@ -124,5 +124,12 @@ export class BookRepository {
       { _id: copyId },
       { $set: { status: status } },
     );
+  }
+  async UpdateStatusBook(bookId: string, status: string): Promise<Book | null> {
+    return this.bookModel.findByIdAndUpdate(
+      bookId,
+      { status, updated_at: new Date() },
+      { new: true },
+    ).exec();
   }
 }

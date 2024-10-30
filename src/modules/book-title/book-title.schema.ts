@@ -23,7 +23,7 @@ export class BookTitle {
   title: string;
 
   // Mô tả dài từ 1 đến 3 câu
-  @Factory(faker => faker.lorem.sentences({ min: 1, max: 3 }))
+  @Factory(faker => faker.lorem.sentences({ min: 5, max: 10 }))
   @Prop()
   description: string;
 

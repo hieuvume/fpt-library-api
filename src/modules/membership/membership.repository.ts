@@ -23,5 +23,11 @@ export class MembershipRepository {
   async findDefaultMembership(): Promise<Membership> {
     return this.membershipModel.findOne().exec();
   }
+  async findmembershipById(membershipId: ObjectId): Promise<Membership | null> {
+    return this.membershipModel.findById(membershipId).exec();
+  }
 
+  async findmembershipByIds(membershipId: string): Promise<Membership | null> {
+    return this.membershipModel.findById(membershipId).exec();
+  }
 }
