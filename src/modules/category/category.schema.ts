@@ -1,6 +1,7 @@
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 import { Factory } from "nestjs-seeder";
+import * as mongoosePaginate from "mongoose-paginate-v2";
 
 export type CategoryDocument = Category & Document;
 
@@ -16,3 +17,4 @@ export class Category {
 }
 
 export const CategorySchema = SchemaFactory.createForClass(Category);
+CategorySchema.plugin(mongoosePaginate);
