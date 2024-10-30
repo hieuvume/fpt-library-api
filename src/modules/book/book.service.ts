@@ -16,9 +16,13 @@ export class BookService {
         private readonly membershipRepository: MembershipRepository,
     ) { }
 
-    async findAll() {
-        return this.bookRepository.findAll(); // Fetch all books
-    }
+  async findAll() {
+    return this.bookRepository.findAll();
+  }
+
+  async findAllPaginate(page: number = 1, limit: number = 5, sort: string, order: string): Promise<any> {
+    return this.bookRepository.findAllPaginate(page, limit, sort, order);
+  }
 
     async create(book: CreateBookDto) {
         return this.bookRepository.create(book); // Create a new book

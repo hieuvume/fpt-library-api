@@ -11,13 +11,13 @@ export class UserRepository {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private readonly bookRepository: BookRepository
-  ) {}
+  ) { }
 
   async findAll(): Promise<User[]> {
     return this.userModel.find().exec();
   }
 
-  async getProfile(id: string): Promise<User> {
+  async getProfile(id: string) {
     return this.userModel
       .findById(id)
       .populate([
@@ -27,11 +27,11 @@ export class UserRepository {
       .exec();
   }
 
-  async findById(id: string): Promise<User> {
+  async findById(id: string) {
     return this.userModel.findById(id).populate("role");
   }
 
-  async findUserById(id: string): Promise<User> {
+  async findUserById(id: string) {
     return this.userModel
       .findById(id)
       .populate("role")

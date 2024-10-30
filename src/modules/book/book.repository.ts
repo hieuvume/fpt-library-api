@@ -1,57 +1,62 @@
 import { InjectModel } from '@nestjs/mongoose';
-import mongoose, { Model, Types } from 'mongoose';
+import mongoose, { PaginateModel, Types } from 'mongoose';
 import { Book } from './book.schema';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { log } from 'console';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class BookRepository {
-  constructor(@InjectModel(Book.name) private readonly bookModel: Model<Book>) { }
+  constructor(@InjectModel(Book.name) private readonly bookModel: PaginateModel<Book>) { }
 
-  async findAll() {
+  async findAll(): Promise<Book[]> {
     return this.bookModel.find().exec();
   }
 
-  async create(book: CreateBookDto) {
+  async findAllPaginate(
+    page: number,
+    limit: number,
+    sortField: string,
+    sortOrder: string
+  ) {
+    const sort: Record<string, any> = {};
+    sort[sortField] = sortOrder === "asc" ? 1 : -1;
+
+    return this.bookModel.paginate(
+      {
+      },
+      {
+        page,
+        limit,
+        populate: [{ path: "book_title" }],
+        sort,
+      }
+    );
+  }
+
+  async create(book: CreateBookDto): Promise<Book> {
     const newBook = new this.bookModel(book);
     return newBook.save();
   }
 
-  async findById(id: string) {
-    return this.bookModel.findById({ book_title: new mongoose.Types.ObjectId(id) }).exec();
+  async findById(id: string): Promise<Book | null> {
+    return this.bookModel.findById(id).exec();
   }
 
-  async update(id: string, book: UpdateBookDto) {
-    return this.bookModel.findByIdAndUpdate(id, book, { new: true }).exec();
+  async update(id: string, book: UpdateBookDto): Promise<Book | null> {
+    return this.bookModel.findByIdAndUpdate(new Types.ObjectId(id), book, { new: true }).exec();
   }
 
-  async delete(id: string) {
+  async delete(id: string): Promise<Book | null> {
     return this.bookModel.findByIdAndDelete(id).exec();
   }
 
   async findBooksByTitleId(bookTitleId: string) {
     return this.bookModel.aggregate([
-      {
-        $match: {
-          book_title: new mongoose.Types.ObjectId(bookTitleId),
-        },
-      },
-      {
-        $lookup: {
-          from: 'booktitles',
-          localField: 'book_title',
-          foreignField: '_id',
-          as: 'bookTitleInfo',
-        },
-      },
-      {
-        $lookup: {
-          from: 'categories',
-          localField: 'bookTitleInfo.categories',
-          foreignField: '_id',
-          as: 'categoryDetails',
-        },
-      },
+      { $match: { book_title: new Types.ObjectId(bookTitleId) } },
+      { $lookup: { from: 'booktitles', localField: 'book_title', foreignField: '_id', as: 'bookTitleInfo' } },
+      { $lookup: { from: 'categories', localField: 'bookTitleInfo.categories', foreignField: '_id', as: 'categoryDetails' } },
       { $unwind: '$bookTitleInfo' },
       {
         $group: {
@@ -76,7 +81,7 @@ export class BookRepository {
               times_borrowed: '$times_borrowed',
               created_at: '$created_at',
               updated_at: '$updated_at',
-            }
+            },
           },
           totalCount: { $sum: 1 },
           availableCount: {
@@ -106,9 +111,9 @@ export class BookRepository {
       },
     ]);
   }
-  
+
   async findBooksByTitleIds(bookTitleId: string) {
-    return this.bookModel.find({ book_title: new mongoose.Types.ObjectId(bookTitleId) }).exec();
+    return this.bookModel.find({ book_title: new Types.ObjectId(bookTitleId) }).exec();
   }
   async findRandomAvailableCopy(bookTitleId: string): Promise<any | null> {
     const availableCopies = await this.bookModel.aggregate([

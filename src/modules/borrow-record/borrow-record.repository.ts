@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import mongoose, { Model, PaginateModel, Types } from "mongoose";
+import mongoose, { PaginateModel, Types } from "mongoose";
 import { BorrowRecord, BorrowRecordDocument } from "./borrow-record.schema";
 import { type } from "os";
 import { populate } from "dotenv";

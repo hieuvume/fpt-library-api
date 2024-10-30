@@ -31,7 +31,7 @@ export class BorrowRecord {
   librarian: User;
 
   @Factory(() => "pending")
-  @Prop()
+  @Prop({ required: true, enum: ["pending", "holding", "borrowing", "rejected", "returned", "losted"] })
   status: string; // [pending, holding, borrowing, rejected, returned, losted]
 
   @Factory(() => "")

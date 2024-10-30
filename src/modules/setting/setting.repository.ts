@@ -26,6 +26,12 @@ export class SettingRepository {
       const newSetting = new this.settingModel({
         max_borrow_duration: 7,
         overdue_penalty_per_day: 10000,
+        bank_name: 'Vietcombank',
+        bank_account: '0899622850',
+        bank_account_name: 'VU TRUNG HIEU',
+        bank_code: 'VCB',
+        momo_account_name: 'VU TRUNG HIEU',
+        momo_account_number: '0899622850',
         created_at: new Date(),
         updated_at: new Date(),
       });

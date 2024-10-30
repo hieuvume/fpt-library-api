@@ -1,16 +1,27 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, Query, Req } from '@nestjs/common';
 import { BookService } from './book.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 
-@Controller('dashboard/books')
+@Controller('dashboard/books') // Ensure this path is correct
 export class BookDashboardController {
-    constructor(private readonly bookService: BookService) {}
+    constructor(private readonly bookService: BookService) { }
 
     @Get('')
-    async list() {
-        return this.bookService.findAll(); // Fetch all books
-    }
+    async list(
+        @Req() req,
+        @Query("page") page: number = 1,
+        @Query("limit") limit: number = 10,
+        @Query("sort") sort: string,
+        @Query("order") order: string
+      ) {
+        return this.bookService.findAllPaginate(
+          page,
+          limit,
+          sort,
+          order
+        );
+      }
 
     @Post('')
     async store(@Body() book: CreateBookDto) {
