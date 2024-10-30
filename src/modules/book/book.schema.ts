@@ -3,6 +3,7 @@ import { Document, Types } from "mongoose";
 import { Factory } from "nestjs-seeder";
 import { BookTitle } from "modules/book-title/book-title.schema";
 import { Transform } from "class-transformer";
+import * as mongoosePaginate from "mongoose-paginate-v2";
 
 export type BookDocument = Book & Document;
 
@@ -54,3 +55,4 @@ export class Book {
 }
 
 export const BookSchema = SchemaFactory.createForClass(Book);
+BookSchema.plugin(mongoosePaginate);
