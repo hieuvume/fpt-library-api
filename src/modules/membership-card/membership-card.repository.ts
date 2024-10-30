@@ -11,7 +11,7 @@ export class MembershipCardRepository {
   constructor(
     @InjectModel(MembershipCard.name)
     private membershipCardModel: Model<MembershipCardDocument>
-  ) {}
+  ) { }
 
   async findAll(): Promise<MembershipCard[]> {
     return this.membershipCardModel.find().exec();
@@ -38,4 +38,9 @@ export class MembershipCardRepository {
       .populate("membership")
       .exec();
   }
+
+  async delete(id: string) {
+    return this.membershipCardModel.findByIdAndDelete(id).exec();
+  }
+
 }

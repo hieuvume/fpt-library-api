@@ -17,6 +17,7 @@ import { UserModule } from "modules/user/user.module";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { FeedbackModule } from "modules/feedback/feedback.module";
+import { PaymentModule } from "modules/payment/payment.module";
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { FeedbackModule } from "modules/feedback/feedback.module";
     MembershipModule,
     MembershipCardModule,
     FeedbackModule,
+    PaymentModule
   ],
   providers: [AppService],
   controllers: [AppController],

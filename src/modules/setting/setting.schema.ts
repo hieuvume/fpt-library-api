@@ -11,6 +11,24 @@ export class Setting {
   @Prop({ required: true })
   overdue_penalty_per_day: number;
 
+  @Prop({ })
+  bank_code: string;
+
+  @Prop({ })
+  bank_name: string;
+
+  @Prop({ })
+  bank_account: string;
+
+  @Prop()
+  bank_account_name: string;
+
+  @Prop()
+  momo_account_name: string;
+
+  @Prop()
+  momo_account_number: string;
+
   @Prop()
   created_at: Date;
 

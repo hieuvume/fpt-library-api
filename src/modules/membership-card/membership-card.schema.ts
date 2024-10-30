@@ -39,7 +39,7 @@ export class MembershipCard {
   total_borrowed: number;
 
   @Prop({ required: true, enum: ["active", "inactive", "expired"] })
-  status: string; // active, inactive, expired
+  status: string; // pending, active, inactive, expired
 
   @Prop({ required: true, default: new Date() })
   created_at: Date;

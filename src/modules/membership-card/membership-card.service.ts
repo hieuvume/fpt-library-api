@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from "@nestjs/common";
+import { BadRequestException, ForbiddenException, Injectable } from "@nestjs/common";
 import { MembershipCardRepository } from "./membership-card.repository";
 import { MembershipCard } from "./membership-card.schema";
 import { MembershipRepository } from "modules/membership/membership.repository";
@@ -6,14 +6,18 @@ import { randomUUID } from "crypto";
 import { ObjectId, Types } from "mongoose";
 import { User } from "modules/user/user.schema";
 import { UserRepository } from "modules/user/user.repository";
+import { UpgradePlanDto } from "./dto/upgrade-plan.dto";
+import { PaymentRepository } from "modules/payment/payment.repository";
+import { PaymentService } from "modules/payment/payment.service";
 
 @Injectable()
 export class MembershipCardService {
   constructor(
     private readonly membershipCardRepository: MembershipCardRepository,
     private readonly membershipRepository: MembershipRepository,
-    private readonly userRepository: UserRepository
-  ) {}
+    private readonly userRepository: UserRepository,
+    private readonly paymentRepository: PaymentRepository
+  ) { }
 
   async validateUserMembership(userId: string): Promise<MembershipCard> {
     const activeCard = await this.membershipCardRepository.findByUserId(userId);
@@ -58,11 +62,11 @@ export class MembershipCardService {
     const currentMembership = currUser.current_membership;
 
     if (!currentMembership) {
-      throw new ForbiddenException("You do not have an active membership.");
+      throw new BadRequestException("You do not have an active membership.");
     }
 
     if (currentMembership.membership.toString() === membershipId.toString()) {
-      throw new ForbiddenException(
+      throw new BadRequestException(
         "You are already subscribed to this membership."
       );
     }
@@ -82,7 +86,7 @@ export class MembershipCardService {
 
     const newMembershipCard = await this.membershipCardRepository.create({
       card_number: randomUUID(),
-      user: userId,
+      user: new Types.ObjectId(userId),
       membership: newPlan,
       start_date: new Date(),
       end_date: newPlanEndDate,
@@ -97,6 +101,56 @@ export class MembershipCardService {
     );
 
     return newMembershipCard;
+  }
+
+  async upgradeMembership(userId: string, data: UpgradePlanDto) {
+    const { membershipId, months, payment_method } = data;
+
+    // Retrieve current user and new membership details
+    const currUser = await this.userRepository.getProfile(userId);
+    const newPlan = await this.membershipRepository.findById(membershipId);
+    const currentMembership = currUser.current_membership;
+
+    if (!newPlan) {
+      throw new BadRequestException("The selected membership plan does not exist.");
+    }
+
+    if (
+      currentMembership &&
+      currentMembership.membership.toString() === membershipId.toString()
+    ) {
+      throw new BadRequestException("You are already subscribed to this membership.");
+    }
+
+    const isExist = await this.paymentRepository.isExistPendingPayment(userId);
+    if (isExist) {
+      throw new BadRequestException("You have an ongoing upgrade payment, if changes are needed, please cancel the previous payment");
+    }
+
+    // Calculate the remaining amount of the current membership
+    const today = new Date();
+    const remainingAmount = this.getRemainingAmount(currentMembership);
+    const pricePerMonth = months < 12 ? newPlan.price_monthly : newPlan.price_yearly;
+    const totalAmount = pricePerMonth * months;
+    const discount = newPlan.price_monthly * months - pricePerMonth * months;
+    const finalAmount = totalAmount - discount - remainingAmount;
+
+    // create new payment
+    const payment = await this.paymentRepository.create({
+      user: new Types.ObjectId(userId),
+      transaction_id: PaymentService.getRandomTransactionId(),
+      amount: finalAmount,
+      payment_method: payment_method,
+      months: months,
+      membership: newPlan,
+      payment_type: 'upgrade',
+      payment_status: "pending",
+      details: `Upgrade to ${newPlan.name}`,
+      created_at: new Date(),
+    })
+
+    return payment;
+
   }
 
   getRemainingDays(currentMembership: MembershipCard): number {
