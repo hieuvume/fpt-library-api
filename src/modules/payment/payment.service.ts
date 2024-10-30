@@ -57,8 +57,8 @@ export class PaymentService {
     return this.paymentRepository.getPaymentsByUserId(userId, page, limit, sort, order);
   }
 
-  async getPayments(page: number = 1, limit: number = 5, sort: string, order: string): Promise<any> {
-    return this.paymentRepository.getPayments(page, limit, sort, order);
+  async getPayments(query: any): Promise<any> {
+    return this.paymentRepository.getPayments(query);
   }
 
   // for dashboard

@@ -47,21 +47,38 @@ export class PaymentRepository {
   }
 
   async getPayments(
-    page: number,
-    limit: number,
-    sortField: string,
-    sortOrder: string
+    query: Record<string, any>
   ) {
-    const sort: Record<string, any> = {};
-    sort[sortField] = sortOrder === "asc" ? 1 : -1;
+    const { page, limit, sort, order, ...rest } = query;
+    const sortRecord: Record<string, any> = {};
+    sortRecord[sort] = order === "asc" ? 1 : -1;
+
+    const searchConditions: Record<string, any> = {};
+
+    if (rest.search) {
+      searchConditions.$or = [
+        { transaction_id: { $regex: rest.search, $options: "i" } },
+        { payment_status: { $regex: rest.search, $options: "i" } },
+        { payment_type: { $regex: rest.search, $options: "i" } },
+      ];
+    }
+
+    if (rest.pending) {
+      searchConditions.payment_status = 'pending';
+    }
 
     return this.paymentModel.paginate(
-      {},
+      searchConditions,
       {
         page,
         limit,
-        populate: [{ path: "membership" }],
-        sort,
+        populate: [
+          { path: "membership" },
+          { path: 'user' },
+          { path: 'from', populate: { path: 'membership' } },
+          { path: 'to', populate: { path: 'membership' } }
+        ],
+        sort: sortRecord,
       }
     );
   }
