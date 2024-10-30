@@ -7,6 +7,10 @@ import { CategoryRepository } from './category.repository';
 export class CategoryService {
   constructor(private readonly categoryRepository: CategoryRepository) {}
 
+  async findAllCategory(page: number = 1,limit: number = 5, sort: string, order: string): Promise<any> {
+    return this.categoryRepository.findAllCategory(page, limit, sort, order);
+  }
+
   async findByTitle(title: string) {
     return this.categoryRepository.findByTitle(title);
   }
