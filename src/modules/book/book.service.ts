@@ -2,8 +2,6 @@ import { BadRequestException, ForbiddenException, Injectable, NotFoundException 
 import { BookRepository } from './book.repository';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
-
-import { error } from 'console';
 import { isValidObjectId, Types } from 'mongoose';
 import { BorrowRecordRepository } from 'modules/borrow-record/borrow-record.repository';
 import { MembershipRepository } from 'modules/membership/membership.repository';
@@ -38,31 +36,7 @@ export class BookService {
             throw new BadRequestException('Book not found');
         }
 
-        return book.populate(
-            {
-                path: 'book_title',
-                select: ['title', 'description', 'brief_content', 'cover_image'],
-                populate: [{
-                    path: 'categories',
-                    select: ['title', 'description']
-
-                },
-                {
-                    path: 'memberships'
-                },
-                {
-                    path: 'feedbacks',
-                    populate: {
-                        path: 'user',
-                        select: ['full_name', 'avatar_url']
-                    },
-                    select: ['content', 'rating'],
-                }
-                ],
-            },
-
-
-        );
+        return book
     }
     async findBooksByTitleId(bookTitleId: string) {
         if (!isValidObjectId(bookTitleId)) {

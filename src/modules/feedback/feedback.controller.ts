@@ -18,8 +18,13 @@ export class FeedbackController {
   @Post('/comment')
   @UseGuards(AuthGuard, FeedbackGuard)
   async createFeedback(@Req() req, @Body() feedbackDto: CreateFeedbackDto) {
-    const userId = req.user._id; 
-    const bookTitleId = req.body.book_title_id; 
-    return this.feedbackService.createFeedback(userId, bookTitleId, feedbackDto);
+    const userId = req.user._id;  
+    const bookTitleId = req.body.book_title_id;  
+    const feedback = await this.feedbackService.createFeedback(userId, bookTitleId, feedbackDto);
+    
+    return {
+      message: 'Feedback created successfully',
+      feedback,
+    };
   }
 }

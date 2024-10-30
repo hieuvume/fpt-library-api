@@ -16,7 +16,10 @@ export class FeedbackService {
     return this.bookTitleRepository.findFeedbacksByTitleId(bookTitleId, page, pageSize);
   }
   async createFeedback(userId: string, bookTitleId: string, feedbackDto: CreateFeedbackDto): Promise<Feedback> {
+    // Tạo phản hồi mới bao gồm cả đánh giá sao
     const feedback = await this.feedbackRepository.createFeedback(userId, bookTitleId, feedbackDto);
+
+    // Thêm ID của phản hồi vào danh sách feedbacks của BookTitle
     await this.bookTitleRepository.addFeedbackToBookTitle(bookTitleId, feedback._id.toString());
 
     return feedback;

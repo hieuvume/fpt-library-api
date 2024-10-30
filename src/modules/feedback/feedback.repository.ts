@@ -26,14 +26,13 @@ export class FeedbackRepository {
   }
 
   async createFeedback(userId: string, bookTitleId: string, feedbackDto: CreateFeedbackDto): Promise<Feedback> {
-    const newFeedback = new this.feedbackModel({
-      user: new Types.ObjectId(userId),
-      book_title: new Types.ObjectId(bookTitleId),
-      content: feedbackDto.content,
-      rating: feedbackDto.rating,
+    const feedback = new this.feedbackModel({
+      ...feedbackDto,           // Bao gồm rating từ feedbackDto
+      user: userId,
+      book_title: bookTitleId,
       created_at: new Date(),
-      updated_at: new Date(),
+      updated_at:new Date(),
     });
-    return newFeedback.save();
+    return feedback.save();
   }
 }

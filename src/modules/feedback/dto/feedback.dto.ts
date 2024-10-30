@@ -1,12 +1,14 @@
-
-import { IsString, IsInt, Min, Max } from 'class-validator';
+// create-feedback.dto.ts
+import { IsNotEmpty, IsString, IsNumber, Max, Min } from 'class-validator';
 
 export class CreateFeedbackDto {
+  @IsNotEmpty()
   @IsString()
   content: string;
 
-  @IsInt()
-  @Min(0)
+  @IsNotEmpty()
+  @IsNumber()
+  @Min(1)
   @Max(5)
   rating: number;
 }

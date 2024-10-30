@@ -9,6 +9,7 @@ import { UserRepository } from "modules/user/user.repository";
 import { UpgradePlanDto } from "./dto/upgrade-plan.dto";
 import { PaymentRepository } from "modules/payment/payment.repository";
 import { PaymentService } from "modules/payment/payment.service";
+import { BorrowRecordRepository } from "modules/borrow-record/borrow-record.repository";
 
 @Injectable()
 export class MembershipCardService {
@@ -16,7 +17,8 @@ export class MembershipCardService {
     private readonly membershipCardRepository: MembershipCardRepository,
     private readonly membershipRepository: MembershipRepository,
     private readonly userRepository: UserRepository,
-    private readonly paymentRepository: PaymentRepository
+    private readonly paymentRepository: PaymentRepository,
+    private readonly borrowRecordRepository: BorrowRecordRepository,
   ) { }
 
   async validateUserMembership(userId: string): Promise<string> {
