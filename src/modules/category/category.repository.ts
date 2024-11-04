@@ -47,7 +47,7 @@ export class CategoryRepository {
     return this.categoryModel.findOne({ title }).exec();
   }
 
-  async find(condition: any) {
-    return this.categoryModel.find(condition);
+  async delete(id: string): Promise<Category | null> {
+    return this.categoryModel.findByIdAndDelete(id).exec();
   }
 }
