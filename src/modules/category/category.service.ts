@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CategoryRepository } from './category.repository';
+import { CreateCategoryDto } from './dto/create-category.dto';
 
 @Injectable()
 export class CategoryService {
@@ -13,6 +14,10 @@ export class CategoryService {
 
   async findByTitle(title: string) {
     return this.categoryRepository.findOneByTitle(title);
+  }
+
+  async create(category: CreateCategoryDto) {
+    return this.categoryRepository.create(category);
   }
 
 }
