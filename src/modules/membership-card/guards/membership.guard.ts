@@ -16,6 +16,7 @@ export class MembershipGuard implements CanActivate {
 
     try {
       const membershipCard = await this.membershipCardService.validateUserMembership(user.id);
+      console
       request.membershipCard = membershipCard; // Gán thẻ vào request
     } catch (error) {
       throw new ForbiddenException(error.message);

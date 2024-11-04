@@ -156,7 +156,6 @@ export class BorrowRecordRepository {
       status: 'pending',
     });
     return newBorrowRecord.save();
-
   }
 
   async userHasBorrowedBookTitle(userId: string, bookTitleId: string): Promise<boolean> {
@@ -218,22 +217,23 @@ export class BorrowRecordRepository {
       is_returned: false,
     }, options);
   }
-  async countCurrentMonthBorrows(userId: string): Promise<number> {
-    const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+  async countCurrentBorrows(userId: string,start_date:Date,end_date:Date): Promise<number> {
+   // const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
     return this.borrowRecordModel.countDocuments({
       user: new Types.ObjectId(userId),
-      borrow_date: { $gte: startOfMonth }, 
+      borrow_date: { $gte: start_date, $lte: end_date }, 
       status: { $in: ['pending', 'holding', 'borrowing'] },
       is_returned: false,
     }).exec();
   }
   
-  async countMonthlyReserves(userId: string): Promise<number> {
-    const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+  async countTotalMonthlyBorrows(userId: string,start_date:Date,end_date:Date): Promise<number> {
+   // const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
     return this.borrowRecordModel.countDocuments({
       user: new Types.ObjectId(userId),
-      borrow_date: { $gte: startOfMonth },
-      status: { $in: ['pending', 'holding', 'borrowing','returned','losted'] },
+      borrow_date: { $gte: start_date, $lte: end_date }, 
+      status: { $in: ['returned','losted'] },
+      
     }).exec();
   }
   async UpdateStatusBook(borrowId: string, status: string,time:number,requestUserId: string): Promise<BorrowRecord | null> {

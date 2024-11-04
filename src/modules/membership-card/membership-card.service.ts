@@ -23,7 +23,7 @@ export class MembershipCardService {
 
   async validateUserMembership(userId: string): Promise<string> {
     const activeCard = await this.membershipCardRepository.findByUserId(userId);
-  
+    
     if (!activeCard) {
       throw new ForbiddenException("You need an active membership to borrow books.");
     }
@@ -40,29 +40,48 @@ export class MembershipCardService {
     if (!membershipRules) {
       throw new ForbiddenException("Invalid membership card type.");
     }
-  
-    await this.validateMembershipRules(userId, membershipRules);
+   
+    const {start_date,end_date} = activeCard;
+    console.log('start_date',start_date);
+    console.log('end_date',end_date);
+    await this.validateMembershipRules(userId, membershipRules,start_date,end_date);
   
     return activeCard.membership._id.toString();
   }
   
-  private async validateMembershipRules(userId: string, rules: any): Promise<void> {
-    const { max_borrow_days, max_borrow_books_per_time, max_reserve_books_per_montly, hold_allowed, renewal_allowed,name } = rules;
-    console.log(max_reserve_books_per_montly);
+  private async validateMembershipRules(userId: string, rules: any, start_date: Date, end_date: Date): Promise<void> {
+    const { max_borrow_books_per_time, max_reserve_books_per_montly, name } = rules;
   
-    const currentBorrows = await this.borrowRecordRepository.countCurrentMonthBorrows(userId);
-    console.log(currentBorrows);
-    if (currentBorrows >= max_borrow_books_per_time) {
-      throw new ForbiddenException(`You can only borrow up to ${max_borrow_books_per_time} books at a time with this ${name}.`);
-    }
+    let currentMonth = new Date(start_date);
   
-    const currentMonthReserves = await this.borrowRecordRepository.countMonthlyReserves(userId);
-    if (currentMonthReserves >= max_reserve_books_per_montly) {
-      throw new ForbiddenException(`You can only reserve up to ${max_reserve_books_per_montly} books per month with this  ${name}.`);
+    while (currentMonth <= end_date) {
+      const startOfMonth = currentMonth.getTime() === start_date.getTime()
+        ? start_date 
+        : new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1); 
+  
+      const endOfMonth = currentMonth.getMonth() === end_date.getMonth() && currentMonth.getFullYear() === end_date.getFullYear()
+        ? end_date 
+        : new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0, 23, 59, 59, 999); 
+  
+      console.log('startOfMonth', startOfMonth);
+      console.log('endOfMonth', endOfMonth);
+  
+      const totalMonthlyBorrows = await this.borrowRecordRepository.countTotalMonthlyBorrows(userId, startOfMonth, endOfMonth);
+      console.log('totalMonthlyBorrows', totalMonthlyBorrows);
+      if (totalMonthlyBorrows >= max_reserve_books_per_montly) {
+        throw new ForbiddenException(`You can only borrow up to ${max_reserve_books_per_montly} books per month with this ${name}.`);
+      }
+  
+      const currentBorrows = await this.borrowRecordRepository.countCurrentBorrows(userId, startOfMonth, endOfMonth);
+      if (currentBorrows >= max_borrow_books_per_time) {
+        throw new ForbiddenException(`You can only borrow up to ${max_borrow_books_per_time} books at a time with this ${name}.`);
+      }
+  
+      // Chuyển sang tháng tiếp theo
+      currentMonth.setMonth(currentMonth.getMonth() + 1);
     }
-    console.log(currentMonthReserves);
-
   }
+  
 
   async initMembershipCard(userId: ObjectId): Promise<MembershipCard> {
     const defaultMembership =

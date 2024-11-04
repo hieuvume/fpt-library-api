@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, UseGuards, Req, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, Req, NotFoundException, HttpCode } from '@nestjs/common';
 import { BookService } from './book.service';
 import { AuthGuard } from 'modules/auth/guards/auth.guard';
 import { MembershipGuard } from 'modules/membership-card/guards/membership.guard';
@@ -44,9 +44,7 @@ export class BookController {
     @Req() req,
     @Body("bookTitleId") bookTitleId: string,
   ) {
-    console.log(req.membershipCard);
     return this.bookService.borrowBook(req.user.id, bookTitleId,req.membershipCard);
-
   }
 
 

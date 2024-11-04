@@ -23,7 +23,7 @@ export class UserService {
     if (!user) {
       throw new UnauthorizedException();
     }
-    console.log(avatar_url);
+
     return this.userRepository.updateUser(id, { avatar_url });
   }
 
