@@ -20,4 +20,8 @@ export class CategoryService {
     return this.categoryRepository.create(category);
   }
 
+  async delete(id: string) {
+    return this.categoryRepository.delete(id);
+  }
+
 }
