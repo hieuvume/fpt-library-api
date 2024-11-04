@@ -13,6 +13,10 @@ export class CategoryRepository {
   async findAll(): Promise<Category[]> {
     return this.categoryModel.find().exec();
   }
+  
+  async find(condition: any) {
+    return this.categoryModel.find(condition);
+  }
 
   async findAllCategory(
     page: number,
