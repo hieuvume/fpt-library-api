@@ -1,5 +1,15 @@
-import { Controller, Get, Post, Body, Param, Query, Req } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Query,
+  Req,
+  UseGuards,
+} from "@nestjs/common";
 import { BookTitleService } from "./book-title.service";
+import { AuthGuard } from "modules/auth/guards/auth.guard";
 
 @Controller("book-titles")
 export class BookTitleController {
@@ -28,6 +38,12 @@ export class BookTitleController {
   @Get(":id/details")
   async getBookDetails(@Param("id") id) {
     return this.bookTitleService.getBookDetails(id);
+  }
+
+  @UseGuards(AuthGuard)
+  @Post(":id/borrow")
+  async borrowBook(@Req() req, @Param("id") id) {
+    return this.bookTitleService.borrowBook(req.user.id, id);
   }
 
   @Post("add")

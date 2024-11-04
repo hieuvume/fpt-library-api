@@ -9,47 +9,48 @@ export type BookDocument = Book & Document;
 
 @Schema()
 export class Book {
-
   @Transform(({ value }) => value.toString())
   _id: Types.ObjectId;
 
   @Factory(() => new Types.ObjectId())
-  @Prop({ type: Types.ObjectId, ref: 'BookTitle', required: true })
+  @Prop({ type: Types.ObjectId, ref: "BookTitle", required: true })
   book_title: BookTitle;
 
-  @Factory(faker => faker.string.uuid())
+  @Factory((faker) => faker.string.uuid())
   @Prop({ required: true })
   uniqueId: string;
 
-  @Factory(faker => faker.string.alphanumeric(3))
+  @Factory((faker) => faker.string.alphanumeric(3))
   @Prop({ required: true })
   section: string;
-  
-  @Factory(faker => faker.string.alphanumeric(3))
+
+  @Factory((faker) => faker.string.alphanumeric(3))
   @Prop({ required: true })
   shelf: string;
 
-  @Factory(faker => faker.number.int({ min: 1, max: 5 }))
+  @Factory((faker) => faker.number.int({ min: 1, max: 5 }))
   @Prop({ required: true })
   floor: number;
 
-  @Factory(faker => faker.number.int({ min: 1, max: 20 }))
+  @Factory((faker) => faker.number.int({ min: 1, max: 20 }))
   @Prop({ required: true })
   position: number;
 
-  @Factory(() => 'available')
-  @Prop({ required: true })
+  @Factory((faker) =>
+    faker.helpers.arrayElement(["available", "borrowed", "losted"])
+  )
+  @Prop({ required: true, enum: ["available", "borrowed", "losted"] })
   status: string; // [available, borrowed, losted]
 
-  @Factory(faker => faker.number.int({ min: 1, max: 10 }))
+  @Factory((faker) => faker.number.int({ min: 1, max: 10 }))
   @Prop()
   times_borrowed: number;
 
-  @Factory(faker => faker.date.past())
+  @Factory((faker) => faker.date.past())
   @Prop()
   created_at: Date;
 
-  @Factory(faker => faker.date.recent())
+  @Factory((faker) => faker.date.recent())
   @Prop()
   updated_at: Date;
 }

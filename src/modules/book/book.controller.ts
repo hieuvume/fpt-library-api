@@ -16,10 +16,6 @@ export class BookController {
     return this.bookService.findById(id);
   }
 
-  @Get('details/:bookTitleId')
-  async getBooksByTitleId(@Param('bookTitleId') bookTitleId: string) {
-    return await this.bookService.findBooksByTitleId(bookTitleId);
-  }
   @Post('add')
   async addBook(@Body() book) {
     

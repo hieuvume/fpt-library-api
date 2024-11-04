@@ -56,7 +56,10 @@ export class BookTitle {
   memberships: Membership[];
 
   // Giá sách từ 50,000 đến 200,000 VND (điều chỉnh để phù hợp với giá sách thực tế)
-  @Factory((faker) => faker.number.int({ min: 50000, max: 200000 }))
+  @Factory((faker) => {
+    const basePrice = faker.number.int({ min: 50000, max: 200000 });
+    return basePrice - (basePrice % 1000);
+  })
   @Prop({ required: true })
   price: number;
 

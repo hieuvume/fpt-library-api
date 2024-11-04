@@ -37,6 +37,9 @@ export class PaymentController {
   @Get(":id")
   async findById(@Req() req, @Param("id") id: string) {
     const payment = await this.paymentService.getPaymentById(id);
+    if (!payment) {
+        throw new NotFoundException("Payment not found");
+    }
     if (payment.user._id != req.user.id) {
       throw new NotFoundException("Payment not found");
     }
@@ -45,6 +48,13 @@ export class PaymentController {
 
   @Put(":id/cancel")
   async cancelPayment(@Req() req, @Param("id") id: string) {
+    const payment = await this.paymentService.getPaymentById(id);
+    if (!payment) {
+        throw new NotFoundException("Payment not found");
+    }
+    if (payment.user._id != req.user.id) {
+      throw new NotFoundException("Payment not found");
+    }
     return this.paymentService.failPayment(id);
   }
 

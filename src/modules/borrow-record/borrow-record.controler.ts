@@ -1,43 +1,40 @@
 import {
   Controller,
   Get,
+  NotFoundException,
+  Param,
+  Put,
   Query,
   Req,
-  UseGuards
+  UseGuards,
 } from "@nestjs/common";
 import { AuthGuard } from "modules/auth/guards/auth.guard";
 import { BorrowRecordService } from "./borrow-record.service";
 
-
+@UseGuards(AuthGuard)
 @Controller("borrow-records")
 export class BorrowRecordController {
   constructor(private readonly borrowRecordService: BorrowRecordService) {}
 
-  @UseGuards(AuthGuard)
   @Get("current-loans")
-  async findCurrentLoans(
-    @Req() req,
-  ) {
-    return this.borrowRecordService.findCurrentLoans(
-      req.user.id,
-    );
+  async findCurrentLoans(@Req() req) {
+    return this.borrowRecordService.findCurrentLoans(req.user.id);
   }
 
-  @UseGuards(AuthGuard)
   @Get("histories")
-  async findAllBooks(
-    @Req() req,
-    @Query("page") page: number = 1,
-    @Query("limit") limit: number = 10,
-    @Query("sort") sort: string,
-    @Query("order") order: string
-  ) {
-    return this.borrowRecordService.findHistoriesBook(
-      req.user.id,
-      page,
-      limit,
-      sort,
-      order
-    );
+  async findAllBooks(@Req() req, @Query() query) {
+    return this.borrowRecordService.findHistoriesBook(req.user.id, query);
+  }
+
+  @Put(":id/cancel")
+  async cancelBorrow(@Req() req, @Param("id") id: string) {
+    const payment = await this.borrowRecordService.findById(id);
+    if (!payment) {
+      throw new NotFoundException("Payment not found");
+    }
+    if (payment.user._id != req.user.id) {
+      throw new NotFoundException("Payment not found");
+    }
+    return this.borrowRecordService.cancelBorrow(id);
   }
 }

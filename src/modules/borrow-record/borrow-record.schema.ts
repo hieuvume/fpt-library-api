@@ -18,7 +18,7 @@ export class BorrowRecord {
   @Type(() => User)
   user: User;
 
-  @Prop({ type: Types.ObjectId, ref: Book.name, required: true })
+  @Prop({ type: Types.ObjectId, ref: Book.name })
   @Type(() => Book)
   book: Book;
 
@@ -26,17 +26,38 @@ export class BorrowRecord {
   @Type(() => BookTitle)
   book_title: BookTitle;
 
-  @Prop({ type: Types.ObjectId, ref: User.name, required: true })
+  @Prop({ type: Types.ObjectId, ref: User.name })
   @Type(() => User)
   librarian: User;
 
-  @Factory(() => "pending")
-  @Prop({ required: true, enum: ["pending", "holding", "borrowing", "rejected", "returned", "losted"] })
-  status: string; // [pending, holding, borrowing, rejected, returned, losted]
+  @Factory((faker) =>
+    faker.helpers.arrayElement([
+      "pending",
+      "holding",
+      "borrowing",
+      "canceled",
+      "rejected",
+      "returned",
+      "losted",
+    ])
+  )
+  @Prop({
+    required: true,
+    enum: [
+      "pending",
+      "holding",
+      "borrowing",
+      "canceled",
+      "rejected",
+      "returned",
+      "losted",
+    ],
+  })
+  status: string;
 
   @Factory(() => "")
   @Prop()
-  note: string
+  note: string;
 
   @Factory(() => "")
   @Prop({})
@@ -61,8 +82,9 @@ export class BorrowRecord {
     date.setDate(date.getDate() + days);
     return date;
   })
-  @Prop({ required: true })
+  @Prop()
   due_date: Date;
+
   @Factory(() => {
     const days = Math.floor(Math.random() * 10) + 5;
     const date = new Date();
@@ -74,7 +96,7 @@ export class BorrowRecord {
   return_date: Date;
 
   @Factory(() => true)
-  @Prop({ required: true })
+  @Prop({ required: true, default: false })
   is_returned: boolean;
 
   @Factory(() => 0)

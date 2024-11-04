@@ -1,8 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { BookRepository } from './book.repository';
-import { CreateBookDto } from './dto/create-book.dto';
-import { UpdateBookDto } from './dto/update-book.dto';
-import { isValidObjectId } from 'mongoose';
+import { BadRequestException, Injectable } from "@nestjs/common";
+import { BookRepository } from "./book.repository";
+import { CreateBookDto } from "./dto/create-book.dto";
+import { UpdateBookDto } from "./dto/update-book.dto";
+import { isValidObjectId } from "mongoose";
 
 @Injectable()
 export class BookService {
@@ -12,7 +12,12 @@ export class BookService {
     return this.bookRepository.findAll();
   }
 
-  async findAllPaginate(page: number = 1, limit: number = 5, sort: string, order: string): Promise<any> {
+  async findAllPaginate(
+    page: number = 1,
+    limit: number = 5,
+    sort: string,
+    order: string
+  ): Promise<any> {
     return this.bookRepository.findAllPaginate(page, limit, sort, order);
   }
 
@@ -22,9 +27,9 @@ export class BookService {
 
   async findById(id: string) {
     if (!isValidObjectId(id)) {
-        throw new BadRequestException('Invalid ID format');
+      throw new BadRequestException("Invalid ID format");
     }
-    
+
     // const book = await this.bookRepository.bookModel
     //     .findById(id)
     //     .populate({
@@ -52,18 +57,10 @@ export class BookService {
     const book = null;
 
     if (!book) {
-        throw new BadRequestException('Book not found');
+      throw new BadRequestException("Book not found");
     }
 
     return book;
-}
-
-
-  async findBooksByTitleId(bookTitleId: string) {
-    if (!isValidObjectId(bookTitleId)) {
-      throw new BadRequestException('Invalid ID format');
-    }
-    return this.bookRepository.findBooksByTitleId(bookTitleId);
   }
 
   async update(id: string, book: UpdateBookDto) {
