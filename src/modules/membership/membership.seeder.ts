@@ -23,7 +23,7 @@ export class MembershipSeeder implements Seeder {
       max_borrow_days: 3,
       max_borrow_books_per_time: 1,
       max_reserve_books_per_montly: 2,
-      color: '#000000',
+      color: 'secondary',
       renewal_allowed: false,
       hold_allowed: false,
     })
@@ -36,7 +36,7 @@ export class MembershipSeeder implements Seeder {
       max_borrow_days: 7,
       max_borrow_books_per_time: 3,
       max_reserve_books_per_montly: 5,
-      color: '#FF0000',
+      color: 'primary',
       renewal_allowed: false,
       hold_allowed: false,
     })
@@ -49,7 +49,7 @@ export class MembershipSeeder implements Seeder {
       max_borrow_days: 10,
       max_borrow_books_per_time: 5,
       max_reserve_books_per_montly: 10,
-      color: '#FFA500',
+      color: 'info',
       renewal_allowed: true,
       hold_allowed: false,
     })
@@ -62,7 +62,7 @@ export class MembershipSeeder implements Seeder {
       max_borrow_days: 14,
       max_borrow_books_per_time: 10,
       max_reserve_books_per_montly: 20,
-      color: '#FFFF00',
+      color: 'danger',
       renewal_allowed: true,
       hold_allowed: true,
     })

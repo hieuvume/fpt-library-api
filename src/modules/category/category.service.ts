@@ -12,7 +12,7 @@ export class CategoryService {
   }
 
   async findByTitle(title: string) {
-    return this.categoryRepository.findByTitle(title);
+    return this.categoryRepository.findOneByTitle(title);
   }
 
 }

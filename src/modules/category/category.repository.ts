@@ -1,14 +1,14 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model, PaginateModel } from 'mongoose';
-import { Category, CategoryDocument } from './category.schema';
+import { Injectable } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model, PaginateModel } from "mongoose";
+import { Category, CategoryDocument } from "./category.schema";
 
 @Injectable()
 export class CategoryRepository {
   constructor(
     @InjectModel(Category.name)
     private categoryModel: PaginateModel<CategoryDocument>
-  ) { }
+  ) {}
 
   async findAll(): Promise<Category[]> {
     return this.categoryModel.find().exec();
@@ -43,7 +43,11 @@ export class CategoryRepository {
     return this.categoryModel.findById(id).exec();
   }
 
-  async findByTitle(title: string): Promise<Category> {
+  async findOneByTitle(title: string) {
     return this.categoryModel.findOne({ title }).exec();
+  }
+
+  async find(condition: any) {
+    return this.categoryModel.find(condition);
   }
 }

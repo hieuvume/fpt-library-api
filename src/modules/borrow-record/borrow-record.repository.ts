@@ -57,7 +57,7 @@ export class BorrowRecordRepository {
   }
 
   async findBestBookTitleOfTheMonth(subMonth: number) {
-    const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() - subMonth, 1);
+    const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() - subMonth - 3, 1);
     const endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() - subMonth + 1, 0);
 
     return this.borrowRecordModel
