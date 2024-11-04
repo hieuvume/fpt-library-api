@@ -46,4 +46,8 @@ export class CategoryRepository {
   async findByTitle(title: string): Promise<Category> {
     return this.categoryModel.findOne({ title }).exec();
   }
+
+  async delete(id: string): Promise<Category | null> {
+    return this.categoryModel.findByIdAndDelete(id).exec();
+  }
 }
