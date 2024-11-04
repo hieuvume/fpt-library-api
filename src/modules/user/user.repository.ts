@@ -11,7 +11,7 @@ export class UserRepository {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private readonly bookRepository: BookRepository
-  ) { }
+  ) {}
 
   async findAll(): Promise<User[]> {
     return this.userModel.find().exec();
@@ -44,7 +44,7 @@ export class UserRepository {
       .exec();
   }
 
-  async findOneByEmail(email: string): Promise<User | null> {
+  async findOneByEmail(email: string) {
     return this.userModel.findOne({ email }).populate("role");
   }
 
@@ -54,7 +54,7 @@ export class UserRepository {
     full_name: string;
     phone_number: string;
     role: Role;
-  }): Promise<User> {
+  }) {
     const newUser = new this.userModel(data);
     return newUser.save();
   }
@@ -67,7 +67,10 @@ export class UserRepository {
     return this.userModel.findByIdAndUpdate({ _id: id }, data).exec();
   }
 
-  async updateCurrentMembership(userId: string, membershipCard: MembershipCard) {
+  async updateCurrentMembership(
+    userId: string,
+    membershipCard: MembershipCard
+  ) {
     return this.userModel
       .updateOne({ _id: userId }, { current_membership: membershipCard._id })
       .exec();

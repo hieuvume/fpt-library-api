@@ -12,8 +12,8 @@ export class CategoryService {
     return this.categoryRepository.findAllCategory(page, limit, sort, order);
   }
 
-  async findByTitle(title: string){
-    return this.categoryRepository.findByTitle(title);
+  async findByTitle(title: string) {
+    return this.categoryRepository.findOneByTitle(title);
   }
 
   async create(category: CreateCategoryDto) {

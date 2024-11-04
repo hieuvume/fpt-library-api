@@ -17,18 +17,8 @@ export class PaymentDashboardController {
   constructor(private readonly paymentService: PaymentService) { }
 
   @Get("")
-  async getPayments(
-    @Query("page") page: number = 1,
-    @Query("limit") limit: number = 10,
-    @Query("sort") sort: string,
-    @Query("order") order: string
-  ) {
-    return this.paymentService.getPayments(
-      page,
-      limit,
-      sort,
-      order
-    );
+  async getPayments(@Query() query) {
+    return this.paymentService.getPayments(query);
   }
 
   @Get(":id")

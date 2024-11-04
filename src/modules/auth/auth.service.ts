@@ -1,7 +1,4 @@
-import {
-  Injectable,
-  UnauthorizedException
-} from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt"; // Sử dụng nếu bạn dùng JWT
 import * as bcrypt from "bcryptjs";
 import { MembershipCardService } from "modules/membership-card/membership-card.service";
@@ -16,7 +13,7 @@ export class AuthService {
     private roleRepository: RoleRepository,
     private jwtService: JwtService,
     private membershipCardService: MembershipCardService
-  ) { }
+  ) {}
 
   async signUp(
     email: string,
@@ -40,11 +37,22 @@ export class AuthService {
       role: userRole,
     });
 
-    this.membershipCardService.initMembershipCard(newUser._id);
+    const membershipCard = await this.membershipCardService.initMembershipCard(
+      newUser._id
+    );
 
-    const payload = { sub: newUser._id, email: newUser.email, id: newUser._id, role: newUser.role.role_name };
+    // this.userRepository.updateCurrentMembership(newUser._id.toString(), membershipCard);
+    newUser.current_membership = membershipCard;
+    newUser.save();
+
+    const payload = {
+      sub: newUser._id,
+      email: newUser.email,
+      id: newUser._id,
+      role: newUser.role.role_name,
+    };
     const accessToken = await this.jwtService.signAsync(payload);
-    
+
     return {
       access_token: accessToken,
       user: newUser,
@@ -92,11 +100,17 @@ export class AuthService {
         role: userRole,
       });
 
-      this.membershipCardService.initMembershipCard(user._id);
+      const membershipCard = await this.membershipCardService.initMembershipCard(user._id);
+      user.current_membership = membershipCard;
+      user.save();
     }
 
-
-    const payload = { sub: user._id, email: user.email, id: user._id, role: user.role.role_name };
+    const payload = {
+      sub: user._id,
+      email: user.email,
+      id: user._id,
+      role: user.role.role_name,
+    };
     const accessToken = await this.jwtService.signAsync(payload);
 
     return {
@@ -104,5 +118,4 @@ export class AuthService {
       user,
     };
   }
-
 }

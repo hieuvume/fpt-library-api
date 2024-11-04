@@ -22,7 +22,7 @@
     "seed:refresh": "node dist/seeder --refresh"
   },
   "dependencies": {
-    "@faker-js/faker": "^9.0.3",
+    "@faker-js/faker": "^9.2.0",
     "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.3",

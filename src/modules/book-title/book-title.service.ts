@@ -21,4 +21,8 @@ export class BookTitleService {
     return this.bookTitleRepository.findById(id);
   }
 
+  async getBookDetails(id: string) {
+    return this.bookTitleRepository.getBookDetails(id);
+  }
+
 }

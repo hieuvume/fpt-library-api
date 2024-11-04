@@ -1,4 +1,8 @@
-import { BadRequestException, ForbiddenException, Injectable } from "@nestjs/common";
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from "@nestjs/common";
 import { MembershipCardRepository } from "./membership-card.repository";
 import { MembershipCard } from "./membership-card.schema";
 import { MembershipRepository } from "modules/membership/membership.repository";
@@ -17,7 +21,7 @@ export class MembershipCardService {
     private readonly membershipRepository: MembershipRepository,
     private readonly userRepository: UserRepository,
     private readonly paymentRepository: PaymentRepository
-  ) { }
+  ) {}
 
   async validateUserMembership(userId: string): Promise<MembershipCard> {
     const activeCard = await this.membershipCardRepository.findByUserId(userId);
@@ -46,12 +50,18 @@ export class MembershipCardService {
   async initMembershipCard(userId: ObjectId): Promise<MembershipCard> {
     const defaultMembership =
       await this.membershipRepository.findDefaultMembership();
+
+    const nextMonth = new Date();
+    nextMonth.setMonth(nextMonth.getMonth() + 1);
+
     return this.membershipCardRepository.create({
       card_number: randomUUID(),
       user: userId,
       membership: defaultMembership._id,
       start_date: new Date(),
+      end_date: nextMonth,
       status: "active",
+      billing_cycle: "monthly",
       price: 0,
     });
   }
@@ -68,6 +78,24 @@ export class MembershipCardService {
     if (currentMembership.membership.toString() === membershipId.toString()) {
       throw new BadRequestException(
         "You are already subscribed to this membership."
+      );
+    }
+
+    if (currentMembership.end_date < new Date()) {
+      throw new BadRequestException(
+        "Your current membership has already expired."
+      );
+    }
+
+    if (currentMembership.status !== "active") {
+      throw new BadRequestException(
+        "Your current membership card is not active."
+      );
+    }
+
+    if (newPlan.price_monthly === 0) {
+      throw new BadRequestException(
+        "You cannot downgrade to a free membership plan."
       );
     }
 
@@ -112,25 +140,32 @@ export class MembershipCardService {
     const currentMembership = currUser.current_membership;
 
     if (!newPlan) {
-      throw new BadRequestException("The selected membership plan does not exist.");
+      throw new BadRequestException(
+        "The selected membership plan does not exist."
+      );
     }
 
     if (
       currentMembership &&
       currentMembership.membership.toString() === membershipId.toString()
     ) {
-      throw new BadRequestException("You are already subscribed to this membership.");
+      throw new BadRequestException(
+        "You are already subscribed to this membership."
+      );
     }
 
     const isExist = await this.paymentRepository.isExistPendingPayment(userId);
     if (isExist) {
-      throw new BadRequestException("You have an ongoing upgrade payment, if changes are needed, please cancel the previous payment");
+      throw new BadRequestException(
+        "You have an ongoing upgrade payment, if changes are needed, please cancel the previous payment"
+      );
     }
 
     // Calculate the remaining amount of the current membership
     const today = new Date();
     const remainingAmount = this.getRemainingAmount(currentMembership);
-    const pricePerMonth = months < 12 ? newPlan.price_monthly : newPlan.price_yearly;
+    const pricePerMonth =
+      months < 12 ? newPlan.price_monthly : newPlan.price_yearly;
     const totalAmount = pricePerMonth * months;
     const discount = newPlan.price_monthly * months - pricePerMonth * months;
     const finalAmount = totalAmount - discount - remainingAmount;
@@ -143,14 +178,13 @@ export class MembershipCardService {
       payment_method: payment_method,
       months: months,
       membership: newPlan,
-      payment_type: 'upgrade',
+      payment_type: "upgrade",
       payment_status: "pending",
       details: `Upgrade to ${newPlan.name}`,
       created_at: new Date(),
-    })
+    });
 
     return payment;
-
   }
 
   getRemainingDays(currentMembership: MembershipCard): number {
