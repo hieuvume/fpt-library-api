@@ -1,13 +1,10 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get } from "@nestjs/common";
 
-@Controller('home')
+@Controller("home")
 export class HomeController {
   // constructor(private readonly userService: UserService) {}
 
-  @Get('')
+  @Get("")
   async findAll() {
-    return 'Hello World!'
   }
-
-
 }

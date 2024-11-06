@@ -16,7 +16,6 @@ async function bootstrap() {
     }, stopAtFirstError: true
   }));
   app.enableCors();
-
   await app.listen(9999);
 }
 bootstrap();

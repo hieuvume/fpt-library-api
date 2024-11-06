@@ -18,6 +18,7 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { FeedbackModule } from "modules/feedback/feedback.module";
 import { PaymentModule } from "modules/payment/payment.module";
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { PaymentModule } from "modules/payment/payment.module";
       dbName: "library",
       pass: "123456",
     }),
+    ScheduleModule.forRoot(),
     MailModule,
     SettingModule,
     BookModule, 

@@ -214,7 +214,7 @@ export class BorrowRecordRepository {
         populate: [
           {
             path: 'user',
-            select: ['full_name', 'email'],
+            select: ['full_name', 'email', 'avatar_url'],
           },
           {
             path: 'book',
@@ -301,6 +301,7 @@ export class BorrowRecordRepository {
       ])
       .exec();
   }
+
   async UpdateStatusBook(borrowId: string, status: string,time:number,requestUserId: string): Promise<BorrowRecord | null> {
     return this.borrowRecordModel.findByIdAndUpdate(
       borrowId,
@@ -310,4 +311,19 @@ export class BorrowRecordRepository {
       { new: true },
     ).exec();
   }
+
+  async findOverduePendingOrHolding(cutoffTime: Date): Promise<BorrowRecordDocument[]> {
+    return this.borrowRecordModel.find({
+      status: { $in: ["pending", "holding"] },
+      borrow_date: { $lt: cutoffTime },
+    }).exec();
+  }
+
+  async updateStatus(id: string, status: string): Promise<void> {
+    await this.borrowRecordModel.updateOne(
+      { _id: id },
+      { status }
+    );
+  }
+
 }

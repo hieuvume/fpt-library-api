@@ -6,6 +6,7 @@ import { Role } from "modules/role/role.schema";
 import { Document, ObjectId, Types } from "mongoose";
 import { Factory } from "nestjs-seeder";
 import * as bcrypt from "bcryptjs";
+import { fakerVI } from "@faker-js/faker";
 export type UserDocument = User & Document;
 
 @Schema()
@@ -14,7 +15,7 @@ export class User {
   @Transform(({ value }) => value.toString())
   _id: ObjectId;
 
-  @Factory((faker) => faker.internet.email())
+  @Factory(() => fakerVI.internet.email())
   @Prop({ required: true, unique: true })
   email: string;
 
@@ -22,11 +23,11 @@ export class User {
   @Prop({})
   password: string;
 
-  @Factory((faker) => faker.person.fullName())
+  @Factory(() => fakerVI.person.fullName())
   @Prop({})
   full_name: string;
 
-  @Factory((faker) => faker.phone.number())
+  @Factory(() => fakerVI.phone.number())
   @Prop()
   phone_number: string;
 
@@ -38,14 +39,14 @@ export class User {
   @Prop()
   date_of_birth: Date;
 
-  @Factory((faker) => faker.location.streetAddress())
+  @Factory(() => fakerVI.location.streetAddress())
   @Prop()
   address: string;
 
   @Factory((faker) => ({
     id_number: faker.string.numeric(12),
     date: faker.date.past(),
-    place: faker.location.city(),
+    place: fakerVI.location.city(),
   }))
   @Prop({ type: Object })
   id_card: object;
@@ -62,7 +63,7 @@ export class User {
   @Type(() => Role)
   role: Role;
 
-  @Factory((faker) => faker.image.avatar())
+  @Factory(() => fakerVI.image.avatar())
   @Prop()
   avatar_url: string;
 

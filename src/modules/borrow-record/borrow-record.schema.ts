@@ -32,9 +32,6 @@ export class BorrowRecord {
 
   @Factory((faker) =>
     faker.helpers.arrayElement([
-      "pending",
-      "holding",
-      "borrowing",
       "canceled",
       "rejected",
       "returned",

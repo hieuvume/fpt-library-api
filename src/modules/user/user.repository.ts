@@ -54,6 +54,7 @@ export class UserRepository {
     full_name: string;
     phone_number: string;
     role: Role;
+    avatar_url: string
   }) {
     const newUser = new this.userModel(data);
     return newUser.save();

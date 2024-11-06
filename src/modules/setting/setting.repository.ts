@@ -29,7 +29,7 @@ export class SettingRepository {
         bank_name: 'Vietcombank',
         bank_account: '0899622850',
         bank_account_name: 'VU TRUNG HIEU',
-        bank_code: 'VCB',
+        bank_code: '970436',
         momo_account_name: 'VU TRUNG HIEU',
         momo_account_number: '0899622850',
         created_at: new Date(),

@@ -1,3 +1,4 @@
+import { fakerVI } from "@faker-js/faker";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt"; // Sử dụng nếu bạn dùng JWT
 import * as bcrypt from "bcryptjs";
@@ -35,6 +36,7 @@ export class AuthService {
       full_name,
       phone_number,
       role: userRole,
+      avatar_url: fakerVI.image.avatar(),
     });
 
     const membershipCard = await this.membershipCardService.initMembershipCard(
@@ -98,9 +100,11 @@ export class AuthService {
         password: null,
         phone_number: null,
         role: userRole,
+        avatar_url: fakerVI.image.avatar(),
       });
 
-      const membershipCard = await this.membershipCardService.initMembershipCard(user._id);
+      const membershipCard =
+        await this.membershipCardService.initMembershipCard(user._id);
       user.current_membership = membershipCard;
       user.save();
     }

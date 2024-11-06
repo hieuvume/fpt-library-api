@@ -45,7 +45,7 @@ export class Payment {
   @Prop({ required: true, enum: ["upgrade", "extend"] })
   payment_type: string;
 
-  @Factory((faker) => faker.helpers.arrayElement(["pending", "completed", "failed"]))
+  @Factory((faker) => faker.helpers.arrayElement(["completed", "failed"]))
   @Prop({ required: true, default: "pending", enum: ["pending", "completed", "failed"] })
   payment_status: string;
 
