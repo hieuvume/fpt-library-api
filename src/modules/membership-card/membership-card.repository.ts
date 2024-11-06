@@ -43,4 +43,43 @@ export class MembershipCardRepository {
     return this.membershipCardModel.findByIdAndDelete(id).exec();
   }
 
+
+  async getMembershipStatistics() {
+    const membershipStats = await this.membershipCardModel.aggregate([
+      {
+        $group: {
+          _id: {
+            membership: '$membership',
+            billing_cycle: '$billing_cycle'
+          },
+          count: { $sum: 1 } 
+        }
+      },
+      {
+        $lookup: {
+          from: 'memberships',              
+          localField: '_id.membership',     
+          foreignField: '_id',              
+          as: 'membership_info'             
+        }
+      },
+      {
+        $unwind: '$membership_info'       
+      },
+      {
+        $project: {
+          _id: 0,
+          membership: '$membership_info.name',
+          billing_cycle: '$_id.billing_cycle',
+          count: 1
+        }
+      }
+    ]);
+    const total_count = membershipStats.reduce((acc, item) => acc + item.count, 0);
+    return {
+      total_count,
+      membershipStats
+    };
+  }
+  
 }

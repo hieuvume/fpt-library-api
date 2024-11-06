@@ -61,11 +61,18 @@ export class Payment {
   @Prop()
   details: string;
 
-  @Factory((faker) => faker.date.recent())
+  @Factory((faker) => {
+    const now = new Date();
+    const pastYear = new Date(now.getFullYear(), now.getMonth() - 12, now.getDate());
+    return faker.date.between({ from: pastYear, to: now }); 
+  })
   @Prop({})
   payment_date: Date;
-
-  @Factory((faker) => faker.date.recent())
+  @Factory((faker) => {
+    const now = new Date();
+    const pastYear = new Date(now.getFullYear(), now.getMonth() - 12, now.getDate());
+    return faker.date.between({ from: pastYear, to: now }); 
+  })
   @Prop()
   created_at: Date;
 }

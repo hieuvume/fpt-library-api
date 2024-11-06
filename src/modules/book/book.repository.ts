@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { ForbiddenException, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import mongoose, { PaginateModel, Types } from "mongoose";
 import { Book } from "./book.schema";
@@ -100,5 +100,22 @@ export class BookRepository {
         status: "available",
       })
       .exec();
+  }
+
+  async findBookByBookTitle(bookTitleId: string) {
+    if (!Types.ObjectId.isValid(bookTitleId)) {
+      throw new ForbiddenException("Invalid ID");
+    }
+    return this.bookModel.find({
+      book_title: new Types.ObjectId(bookTitleId),
+      status: "available"
+    }).exec();
+  }
+  async UpdateStatusBook(bookId: string, status: string): Promise<Book | null> {
+    return this.bookModel.findByIdAndUpdate(
+      bookId,
+      { status, updated_at: new Date() },
+      { new: true },
+    ).exec();
   }
 }

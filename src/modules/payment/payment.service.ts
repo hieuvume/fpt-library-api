@@ -153,5 +153,7 @@ export class PaymentService {
     return transactionId.toUpperCase();
   }
 
-
+  async getMonthlyPaymentStatistics() {
+    return this.paymentRepository.getMonthlyPaymentStatistics();
+  }
 }

@@ -89,5 +89,33 @@ export class PaymentRepository {
       payment_status: "pending",
     });
   }
+  async getMonthlyPaymentStatistics() {
+    const monthlyPayments = await this.paymentModel.aggregate([
+      {
+        $group: {
+          _id: {
+            month: { $month: '$payment_date' },  
+            year: { $year: '$payment_date' }     
+          },
+          totalAmount: { $sum: '$amount' }     
+        }
+      },
+      {
+        $sort: {
+          '_id.year': 1,
+          '_id.month': 1
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          month: '$_id.month',
+          year: '$_id.year',
+          totalAmount: 1
+        }
+      }
+    ]);
 
+    return monthlyPayments;
+  }
 }

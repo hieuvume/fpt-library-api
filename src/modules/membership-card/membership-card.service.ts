@@ -208,4 +208,7 @@ export class MembershipCardService {
     const remainingAmount = pricePerDay * remainingDays;
     return remainingAmount;
   }
+  async getMembershipStatistics() {
+    return this.membershipCardRepository.getMembershipStatistics();
+  }
 }

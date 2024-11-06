@@ -18,14 +18,15 @@ export class MembershipCardSeeder implements Seeder {
 
   async seed(): Promise<any> {
     const users = await this.userModel.find({});
-    const defaultMembership = await this.membershipModel.findOne({});
+    const defaultMembership = await this.membershipModel.find();
 
     const nextMonth = new Date();
     nextMonth.setMonth(nextMonth.getMonth() + 1);
     for (const user of users) {
+      const randomMembership = defaultMembership[Math.floor(Math.random() * defaultMembership.length)];
       const card = new this.membershipCardModel({
         user: user._id,
-        membership: defaultMembership._id,
+        membership: randomMembership._id,
         card_number: randomUUID(),
         start_date: new Date(),
         end_date: nextMonth,

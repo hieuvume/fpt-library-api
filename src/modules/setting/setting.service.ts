@@ -8,5 +8,8 @@ export class SettingService {
   initIfEmpty() {
     return this.settingRepository.initIfEmpty();
   }
+  async updateSetting(data: any) {
+    return this.settingRepository.updateSetting(data);
+  }
 
 }

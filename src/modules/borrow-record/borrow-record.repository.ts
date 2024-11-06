@@ -1,14 +1,17 @@
-import { Injectable } from "@nestjs/common";
+import { ForbiddenException, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import mongoose, { PaginateModel, Types } from "mongoose";
 import { BorrowRecord, BorrowRecordDocument } from "./borrow-record.schema";
+import { F } from "@faker-js/faker/dist/airline-BLb3y-7w";
+import path from "path";
+import { populate } from "dotenv";
 
 @Injectable()
 export class BorrowRecordRepository {
   constructor(
     @InjectModel(BorrowRecord.name)
     private borrowRecordModel: PaginateModel<BorrowRecordDocument>
-  ) {}
+  ) { }
 
   async findAll(): Promise<BorrowRecord[]> {
     return this.borrowRecordModel.find().exec();
@@ -193,5 +196,118 @@ export class BorrowRecordRepository {
       },
       { new: true }
     );
+  }
+  async findAllLoans(query): Promise<any> {
+    const { page, limit, sort, order, status, ...rest } = query;
+    const sortRecord: Record<string, any> = {};
+    sortRecord[sort] = order === "asc" ? 1 : -1;
+    const searchConditions: Record<string, any> = {};
+    if (status) {
+      searchConditions.status = status;
+    }
+
+    return this.borrowRecordModel.paginate(
+      searchConditions,
+      {
+        page,
+        limit,
+        populate: [
+          {
+            path: 'user',
+            select: ['full_name', 'email'],
+          },
+          {
+            path: 'book',
+            select: ['uniqueId'],
+          },
+          {
+            path: 'book_title',
+            select: ['title', 'author', 'cover_image'],
+          },
+        ],
+        sort: sortRecord,
+      }
+    );
+  }
+
+  async getOverviewStatistics() {
+    const totalBorrows = await this.borrowRecordModel.countDocuments();
+
+    const totalReturnedOnTime = await this.borrowRecordModel.countDocuments({
+      is_returned: true,
+      $expr: { $lte: ['$return_date', '$due_date'] },
+    });
+
+    const totalReturnedLate = await this.borrowRecordModel.countDocuments({
+      is_returned: true,
+      $expr: { $gt: ['$return_date', '$due_date'] },
+    });
+
+    const totalNotReturned = await this.borrowRecordModel.countDocuments({
+      is_returned: false,
+    });
+
+    return {
+      totalBorrows,
+      totalReturnedOnTime,
+      totalReturnedLate,
+      totalNotReturned,
+    };
+  }
+
+  async getStatusStatistics() {
+    const statusCounts = await this.borrowRecordModel.aggregate([
+      {
+        $group: {
+          _id: '$status',
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          status: '$_id',
+          count: 1,
+        },
+      },
+    ]);
+
+    return statusCounts;
+  }
+
+  async findBorrowRecordByID(id: string): Promise<BorrowRecord> {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new ForbiddenException('Invalid ID');
+    }
+    return this.borrowRecordModel.findById(id)
+      .populate([
+        {
+          path: 'user',
+          select: ['full_name', 'email', 'phone_number', 'address', 'avatar_url', 'id_card'],
+          populate: {
+            path: 'current_membership',
+            select: [ 'card_number', 'status'],
+            populate: {
+              path: 'membership',
+              select: ['name'],
+            }
+          }
+        },
+        {
+          path: 'book_title',
+          select: ['title', 'author', 'cover_image', 'description',]
+        },
+
+      ])
+      .exec();
+  }
+  async UpdateStatusBook(borrowId: string, status: string,time:number,requestUserId: string): Promise<BorrowRecord | null> {
+    return this.borrowRecordModel.findByIdAndUpdate(
+      borrowId,
+      { status, 
+        return_date: new Date(Date.now() + time * 24 * 60 * 60 * 1000),
+        librarian:new Types.ObjectId(requestUserId)},
+      { new: true },
+    ).exec();
   }
 }

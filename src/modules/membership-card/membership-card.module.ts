@@ -6,12 +6,13 @@ import { MembershipCard, MembershipCardSchema } from "./membership-card.schema";
 import { MembershipCardController } from "./membership-card.controller";
 import { MembershipCardService } from "./membership-card.service";
 import { MembershipCardRepository } from "./membership-card.repository";
+import { MembershipCardDashboardController } from "./membership-card.dashboard.controller";
 
 
 @Global()
 @Module({
   imports: [MongooseModule.forFeature([{ name: MembershipCard.name, schema: MembershipCardSchema }]), ],
-  controllers: [MembershipCardController],
+  controllers: [MembershipCardController,MembershipCardDashboardController],
   providers: [MembershipCardService, MembershipCardRepository],
   exports: [MembershipCardService, MembershipCardRepository],
 

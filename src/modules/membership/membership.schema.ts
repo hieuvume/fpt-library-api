@@ -1,7 +1,7 @@
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
 import { Transform } from "class-transformer";
 import { Document, ObjectId } from "mongoose";
-
+import * as mongoosePaginate from "mongoose-paginate-v2";
 export type MembershipDocument = Membership & Document;
 
 @Schema()
@@ -42,3 +42,4 @@ export class Membership {
 }
 
 export const MembershipSchema = SchemaFactory.createForClass(Membership);
+MembershipSchema.plugin(mongoosePaginate);

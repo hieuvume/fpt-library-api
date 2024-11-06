@@ -11,7 +11,7 @@ import {
 import { AuthGuard } from "modules/auth/guards/auth.guard";
 import { PaymentService } from "./payment.service";
 
-@UseGuards(AuthGuard)
+//@UseGuards(AuthGuard)
 @Controller("dashboard/payments")
 export class PaymentDashboardController {
   constructor(private readonly paymentService: PaymentService) { }
@@ -20,7 +20,10 @@ export class PaymentDashboardController {
   async getPayments(@Query() query) {
     return this.paymentService.getPayments(query);
   }
-
+  @Get('monthly-statistics')
+  async getMonthlyPaymentStatistics() {
+    return this.paymentService.getMonthlyPaymentStatistics();
+  }
   @Get(":id")
   async findById(@Param("id") id: string) {
     return this.paymentService.getPaymentById(id);
@@ -46,4 +49,5 @@ export class PaymentDashboardController {
     return this.paymentService.rollbackPayment(id);
   }
 
+ 
 }

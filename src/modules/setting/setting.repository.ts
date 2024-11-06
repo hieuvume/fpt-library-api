@@ -40,4 +40,9 @@ export class SettingRepository {
     return settings[0];
   }
 
+  async updateSetting(data: any): Promise<Setting> {
+    const setting = await this.settingModel.findOneAndUpdate({}, data, { new: true }).exec();
+    return setting;
+  }
+
 }
