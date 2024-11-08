@@ -1,17 +1,9 @@
-import {
-  BadRequestException,
-  ForbiddenException,
-  Injectable,
-  Logger,
-  NotFoundException,
-} from "@nestjs/common";
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { Cron, CronExpression } from "@nestjs/schedule";
+import { BookRepository } from "modules/book/book.repository";
+import { UserRepository } from "modules/user/user.repository";
 import { BorrowRecordRepository } from "./borrow-record.repository";
 import { BorrowRecord } from "./borrow-record.schema";
-import { BookRepository } from "modules/book/book.repository";
-import { MembershipCardRepository } from "modules/membership-card/membership-card.repository";
-import { MembershipRepository } from "modules/membership/membership.repository";
-import { UserRepository } from "modules/user/user.repository";
-import { Cron, CronExpression } from "@nestjs/schedule";
 
 @Injectable()
 export class BorrowRecordService {

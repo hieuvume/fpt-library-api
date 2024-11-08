@@ -10,6 +10,7 @@ import {
 import { MembershipCardService } from "./membership-card.service";
 import { AuthGuard } from "modules/auth/guards/auth.guard";
 import { UpgradePlanDto } from "./dto/upgrade-plan.dto";
+import { ExtendPlanDto } from "./dto/extend-plan.dto";
 
 @UseGuards(AuthGuard)
 @Controller("membership-card")
@@ -33,6 +34,17 @@ export class MembershipCardController {
     @Body() data: UpgradePlanDto
   ) {
     return this.membershipCardService.upgradeMembership(
+      req.user.id,
+      data
+    );
+  }
+
+  @Post("extend")
+  async extendMembership(
+    @Req() req,
+    @Body() data: ExtendPlanDto
+  ) {
+    return this.membershipCardService.extendMembership(
       req.user.id,
       data
     );

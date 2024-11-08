@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .content {
+            padding: 20px;
+        }
+        .content h2 {
+            color: #333;
+            font-size: 20px;
+            margin-top: 0;
+        }
+        .content p {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+        .order-details {
+            margin-top: 20px;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+        .order-details p {
+            font-weight: bold;
+        }
+        .order-details span {
+            font-weight: normal;
+            color: #555;
+        }
+        .footer {
+            background-color: #f4f4f4;
+            color: #555;
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            Order Confirmation
+        </div>
+        <div class="content">
+            <h2>Dear {{name}},</h2>
+            <p>Your order with transaction ID <strong>{{transactionId}}</strong> has been created successfully.</p>
+
+            <div class="order-details">
+                <h3>Order Details</h3>
+                <p>Amount: <span>{{amount}}</span></p>
+                <p>Payment Type: <span>{{paymentType}}</span></p>
+                <p>Membership: <span>{{membershipName}}</span></p>
+                <p>Duration: <span>{{months}} months</span></p>
+                <p>Additional Details: <span>{{details}}</span></p>
+            </div>
+
+            <p>Thank you for your order!</p>
+        </div>
+        <div class="footer">
+            &copy; 2024 Your Company. All rights reserved.
+        </div>
+    </div>
+</body>
+</html>

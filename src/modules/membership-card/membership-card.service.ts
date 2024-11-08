@@ -3,16 +3,17 @@ import {
   ForbiddenException,
   Injectable,
 } from "@nestjs/common";
-import { MembershipCardRepository } from "./membership-card.repository";
-import { MembershipCard } from "./membership-card.schema";
-import { MembershipRepository } from "modules/membership/membership.repository";
 import { randomUUID } from "crypto";
-import { ObjectId, Types } from "mongoose";
-import { User } from "modules/user/user.schema";
-import { UserRepository } from "modules/user/user.repository";
-import { UpgradePlanDto } from "./dto/upgrade-plan.dto";
+import { MailService } from "mail/mail.service";
+import { MembershipRepository } from "modules/membership/membership.repository";
 import { PaymentRepository } from "modules/payment/payment.repository";
 import { PaymentService } from "modules/payment/payment.service";
+import { UserRepository } from "modules/user/user.repository";
+import { ObjectId, Types } from "mongoose";
+import { ExtendPlanDto } from "./dto/extend-plan.dto";
+import { UpgradePlanDto } from "./dto/upgrade-plan.dto";
+import { MembershipCardRepository } from "./membership-card.repository";
+import { MembershipCard } from "./membership-card.schema";
 
 @Injectable()
 export class MembershipCardService {
@@ -20,7 +21,8 @@ export class MembershipCardService {
     private readonly membershipCardRepository: MembershipCardRepository,
     private readonly membershipRepository: MembershipRepository,
     private readonly userRepository: UserRepository,
-    private readonly paymentRepository: PaymentRepository
+    private readonly paymentRepository: PaymentRepository,
+    private readonly mailService: MailService
   ) {}
 
   async validateUserMembership(userId: string): Promise<MembershipCard> {
@@ -61,6 +63,7 @@ export class MembershipCardService {
       start_date: new Date(),
       end_date: nextMonth,
       status: "active",
+      months: 0,
       billing_cycle: "monthly",
       price: 0,
     });
@@ -120,6 +123,7 @@ export class MembershipCardService {
       end_date: newPlanEndDate,
       status: "active",
       billing_cycle: "monthly",
+      months: 1,
       price: newPlan.price_monthly,
     });
 
@@ -184,6 +188,33 @@ export class MembershipCardService {
       created_at: new Date(),
     });
 
+    await this.mailService.sendOrderConfirmation(currUser, payment.transaction_id, finalAmount, `Upgrade to ${newPlan.name}`, 'upgrade', newPlan.name, months);
+
+    return payment;
+  }
+
+  async extendMembership(userId: string, data: ExtendPlanDto) {
+    const { payment_method } = data;
+    const currUser = await this.userRepository.getProfile(userId);
+    const currentMembership = currUser.current_membership;
+
+    if (!currentMembership) {
+      throw new BadRequestException("You do not have an active membership.");
+    }
+
+    const payment = await this.paymentRepository.create({
+      user: new Types.ObjectId(userId),
+      transaction_id: PaymentService.getRandomTransactionId(),
+      amount: currentMembership.price,
+      payment_method: payment_method,
+      months: currentMembership?.months,
+      membership: currentMembership.membership,
+      payment_type: "extend",
+      payment_status: "pending",
+      details: `Extend membership for ${currentMembership?.months} months`,
+      created_at: new Date(),
+    });
+
     return payment;
   }
 
@@ -208,7 +239,12 @@ export class MembershipCardService {
     const remainingAmount = pricePerDay * remainingDays;
     return remainingAmount;
   }
+
   async getMembershipStatistics() {
     return this.membershipCardRepository.getMembershipStatistics();
   }
+
+  
+
+
 }

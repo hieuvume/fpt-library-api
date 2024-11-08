@@ -19,6 +19,7 @@ import { AppService } from "./app.service";
 import { FeedbackModule } from "modules/feedback/feedback.module";
 import { PaymentModule } from "modules/payment/payment.module";
 import { ScheduleModule } from '@nestjs/schedule';
+import { NotificationModule } from "modules/notification/notification.module";
 
 @Module({
   imports: [
@@ -45,7 +46,8 @@ import { ScheduleModule } from '@nestjs/schedule';
     MembershipModule,
     MembershipCardModule,
     FeedbackModule,
-    PaymentModule
+    PaymentModule,
+    NotificationModule
   ],
   controllers: [AppController],
   providers: [AppService],

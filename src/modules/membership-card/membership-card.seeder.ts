@@ -23,7 +23,7 @@ export class MembershipCardSeeder implements Seeder {
     const nextMonth = new Date();
     nextMonth.setMonth(nextMonth.getMonth() + 1);
     for (const user of users) {
-      const randomMembership = defaultMembership[Math.floor(Math.random() * defaultMembership.length)];
+      const randomMembership = defaultMembership[0];
       const card = new this.membershipCardModel({
         user: user._id,
         membership: randomMembership._id,
@@ -32,6 +32,7 @@ export class MembershipCardSeeder implements Seeder {
         end_date: nextMonth,
         billing_cycle: "monthly",
         price: 0,
+        months: 1,
         status: "active",
         created_at: new Date()
       });

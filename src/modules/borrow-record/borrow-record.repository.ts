@@ -326,4 +326,27 @@ export class BorrowRecordRepository {
     );
   }
 
+
+  async findNearlyDueRecords(hours: number, notification_count: number): Promise<BorrowRecordDocument[]> {
+    const currentDate = new Date();
+    const targetDate = new Date(currentDate.getTime() + hours * 60 * 60 * 1000);
+
+    return this.borrowRecordModel.find({
+      due_date: { $lte: targetDate, $gte: currentDate },
+      is_returned: false,
+      status: { $in: ["borrowing"] },
+      notification_count: { $lt: notification_count },
+    }).populate([
+      {
+        path: 'user',
+        select: ['full_name', 'email'],
+      },
+      {
+        path: 'book_title',
+        select: ['title', 'author', 'cover_image'],
+      },
+    ]).exec();
+  }
+
+
 }

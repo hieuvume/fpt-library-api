@@ -27,6 +27,9 @@ import { MembershipCard, MembershipCardSchema } from "modules/membership-card/me
 import { MembershipCardSeeder } from "modules/membership-card/membership-card.seeder";
 import { Payment, PaymentSchema } from "modules/payment/payment.schema";
 import { PaymentSeeder } from "modules/payment/payment.seeder";
+import { Setting, SettingSchema } from "modules/setting/setting.schema";
+import { SettingSeeder } from "modules/setting/setting.seeder";
+import { RoleSeeder } from "modules/role/role.seeder";
 
 seeder({
   imports: [
@@ -47,9 +50,12 @@ seeder({
       { name: Membership.name, schema: MembershipSchema },
       { name: MembershipCard.name, schema: MembershipCardSchema },
       { name: Payment.name, schema: PaymentSchema },
+      { name: Setting.name, schema: SettingSchema },
     ]),
   ],
 }).run([
+  SettingSeeder,
+  RoleSeeder,
   UserSeeder,
   MembershipSeeder,
   MembershipCardSeeder,

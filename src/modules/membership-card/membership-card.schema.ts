@@ -23,6 +23,9 @@ export class MembershipCard {
   @Prop({ required: true, enum: ["monthly", "annual"] })
   billing_cycle: string;
 
+  @Prop({ default: 1 })
+  months: number;
+
   @Prop({ required: true })
   card_number: string;
 

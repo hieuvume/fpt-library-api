@@ -31,12 +31,7 @@ export class BorrowRecord {
   librarian: User;
 
   @Factory((faker) =>
-    faker.helpers.arrayElement([
-      "canceled",
-      "rejected",
-      "returned",
-      "losted",
-    ])
+    faker.helpers.arrayElement(["canceled", "rejected", "returned", "losted"])
   )
   @Prop({
     required: true,
@@ -95,6 +90,9 @@ export class BorrowRecord {
   @Factory(() => true)
   @Prop({ required: true, default: false })
   is_returned: boolean;
+
+  @Prop({ default: 0 })
+  notification_count: number;
 
   @Factory(() => 0)
   @Prop()
