@@ -23,5 +23,8 @@ export class CategoryService {
   async delete(id: string) {
     return this.categoryRepository.delete(id);
   }
+  async update(id: string, category: CreateCategoryDto) {
+    return this.categoryRepository.update(id, category);
+  }
 
 }

@@ -5,11 +5,12 @@ import { BookTitleRepository } from "./book-title.repository";
 import { BookTitle, BookTitleSchema } from "./book-title.schema";
 import { BorrowRecordModule } from "modules/borrow-record/borrow-record.module";
 import { BookTitleController } from "./book-title.controller";
+import { BookTitleDashboradController } from "./book-title.dashboard.controller";
 
 @Global()
 @Module({
   imports: [MongooseModule.forFeature([{ name: BookTitle.name, schema: BookTitleSchema }])],
-  controllers: [BookTitleController],
+  controllers: [BookTitleController,BookTitleDashboradController],
   providers: [BookTitleService, BookTitleRepository],
   exports: [BookTitleService, BookTitleRepository],
   
