@@ -5,6 +5,7 @@ import { BorrowRecord, BorrowRecordDocument } from "./borrow-record.schema";
 import { F } from "@faker-js/faker/dist/airline-BLb3y-7w";
 import path from "path";
 import { populate } from "dotenv";
+import { Book } from "modules/book/book.schema";
 
 @Injectable()
 export class BorrowRecordRepository {
@@ -275,7 +276,7 @@ export class BorrowRecordRepository {
     return statusCounts;
   }
 
-  async findBorrowRecordByID(id: string): Promise<BorrowRecord> {
+  async findBorrowRecordByID(id: string) {
     if (!Types.ObjectId.isValid(id)) {
       throw new ForbiddenException('Invalid ID');
     }
@@ -297,17 +298,23 @@ export class BorrowRecordRepository {
           path: 'book_title',
           select: ['title', 'author', 'cover_image', 'description',]
         },
-
+        {
+          path: 'book'
+        }
       ])
       .exec();
   }
 
-  async UpdateStatusBook(borrowId: string, status: string,time:number,requestUserId: string): Promise<BorrowRecord | null> {
+  async updateStatusBook(borrowId: string, time: number, librarianId: string, beforeStatus: string, book: Book): Promise<BorrowRecord | null> {
     return this.borrowRecordModel.findByIdAndUpdate(
       borrowId,
-      { status, 
+      { 
+        status: 'borrowing', 
         return_date: new Date(Date.now() + time * 24 * 60 * 60 * 1000),
-        librarian:new Types.ObjectId(requestUserId)},
+        librarian: new Types.ObjectId(librarianId),
+        before_status: beforeStatus,
+        book: book
+      },
       { new: true },
     ).exec();
   }

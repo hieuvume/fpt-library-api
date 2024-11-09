@@ -111,7 +111,7 @@ export class BookRepository {
       status: "available"
     }).exec();
   }
-  async UpdateStatusBook(bookId: string, status: string): Promise<Book | null> {
+  async updateStatusBook(bookId: string, status: string): Promise<Book | null> {
     return this.bookModel.findByIdAndUpdate(
       bookId,
       { status, updated_at: new Date() },

@@ -88,28 +88,38 @@ export class BorrowRecordService {
   async updateStatusBook(
     borrowId: string,
     bookId: string,
-    borrowStatus: string,
-    bookStatus: string,
+    beforeStatus: string,
     userId: string,
-    requestUserId: string
+    librarianId: string
   ) {
     const user = await this.userRepository.getProfile(userId);
-    const borrowRecord = await this.borrowRecordRepository.UpdateStatusBook(
-      borrowId,
-      borrowStatus,
-      user?.current_membership?.membership?.max_borrow_days,
-      requestUserId
-    );
-    if (!borrowRecord) {
-      throw new NotFoundException("Borrow record not found.");
-    }
-    const book = await this.bookRepository.UpdateStatusBook(bookId, bookStatus);
+    const book = await this.bookRepository.findById(bookId);
+
     if (!book) {
       throw new NotFoundException("Book not found.");
     }
+
+    const borrowRecord = await this.borrowRecordRepository.updateStatusBook(
+      borrowId,
+      user?.current_membership?.membership?.max_borrow_days,
+      librarianId,
+      beforeStatus,
+      book
+    );
+
+    if (!borrowRecord) {
+      throw new NotFoundException("Borrow record not found.");
+    }
+    if (borrowRecord.book) {
+      const book = await this.bookRepository.updateStatusBook(borrowRecord._id.toString(), 'borrowed');
+    } else {
+      const book = await this.bookRepository.updateStatusBook(bookId, 'borrowed');
+      if (!book) {
+        throw new NotFoundException("Book not found.");
+      }
+    }
     return {
       borrowRecordStatus: borrowRecord,
-      bookStatus: book,
     };
   }
 
@@ -141,6 +151,53 @@ export class BorrowRecordService {
         `Canceled ${overdueRecords.length} overdue borrow records and updated book status.`
       );
     }
+  }
+
+  async rejectBorrow(borrowId: string, note: string, librarianId: string) {
+    const borrowRecord = await this.borrowRecordRepository.findBorrowRecordByID(borrowId)
+    if (!borrowRecord) {
+      throw new NotFoundException("Borrow record not found.");
+    }
+
+    if (borrowRecord.book) {
+      const book = await this.bookRepository.updateStatusBook(borrowRecord.book._id.toString(), 'available');
+    }
+    
+    borrowRecord.note = note;
+    borrowRecord.status = 'rejected';
+    await borrowRecord.save();
+  
+    return borrowRecord
+  }
+
+  async returnedBorrow(borrowId: string, afterStatus: string) {
+    const borrowRecord = await this.borrowRecordRepository.findBorrowRecordByID(borrowId)
+    if (!borrowRecord) {
+      throw new NotFoundException("Borrow record not found.");
+    }
+
+    const book = await this.bookRepository.updateStatusBook(borrowRecord.book._id.toString(), 'available');
+    
+    borrowRecord.after_status = afterStatus;
+    borrowRecord.status = 'returned';
+    await borrowRecord.save();
+  
+    return borrowRecord
+  }
+
+  async lostedBorrow(boorowId: string, penaltyTotal: number) {
+    const borrowRecord = await this.borrowRecordRepository.findBorrowRecordByID(boorowId)
+    if (!borrowRecord) {
+      throw new NotFoundException("Borrow record not found.");
+    }
+
+    const book = await this.bookRepository.updateStatusBook(borrowRecord.book._id.toString(), 'losted');
+    
+    borrowRecord.penatly_total = penaltyTotal;
+    borrowRecord.status = 'losted';
+    await borrowRecord.save();
+  
+    return borrowRecord
   }
 
   @Cron(CronExpression.EVERY_HOUR)
