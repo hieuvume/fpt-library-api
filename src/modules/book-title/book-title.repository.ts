@@ -19,7 +19,7 @@ export class BookTitleRepository {
     @InjectModel(BookTitle.name)
     private bookTitleModel: PaginateModel<BookTitleDocument>,
     private categoryRepository: CategoryRepository
-  ) {}
+  ) { }
 
   async findAll(): Promise<BookTitle[]> {
     return this.bookTitleModel.find().exec();
@@ -135,6 +135,24 @@ export class BookTitleRepository {
         memberships: membershipId,
       })
       .exec();
+  }
+  async getAll(query: any): Promise<any> {
+    const { page, limit, sort, order, ...rest } = query;
+    const sortRecord: Record<string, any> = {};
+    sortRecord[sort] = order === "asc" ? 1 : -1;
+    return this.bookTitleModel.paginate(
+      {},
+      {
+        page,
+        limit,
+        sort: sortRecord,
+        populate: [{ path: "categories" ,
+          select:"title"
+        }, 
+        { path: "memberships" ,
+          select:"name"
+        }],
+      });
   }
 
 }

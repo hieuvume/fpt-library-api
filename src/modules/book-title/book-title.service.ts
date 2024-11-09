@@ -107,4 +107,7 @@ export class BookTitleService {
 
     return borrowRecord;
   }
+  async getAll(query  :Record<string, any>) {
+    return this.bookTitleRepository.getAll(query);
+  }
 }
