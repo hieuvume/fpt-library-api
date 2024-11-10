@@ -15,7 +15,16 @@ services:
       - mongoData:/data/db
       - mongoConfig:/data/configdb
     command: --wiredTigerCacheSizeGB 1.5 --bind_ip_all
-
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+    volumes:
+      - redisData:/data
+      
 volumes:
   mongoData:
   mongoConfig:
+  redisData:
