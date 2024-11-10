@@ -12,6 +12,7 @@ import mongoose, {
   PaginateResult,
   Types,
 } from "mongoose";
+import { UpdateBookTitleDto } from "./dto/update-book-title.dto";
 
 @Injectable()
 export class BookTitleRepository {
@@ -154,5 +155,28 @@ export class BookTitleRepository {
         }],
       });
   }
+  async removeCategory(bookTitleId: string, categoryId: string): Promise<boolean> {
+    const result = await this.bookTitleModel.updateOne(
+      { _id: bookTitleId },
+      { $pull: { categories: new Types.ObjectId(categoryId) } }
+    );
+    return result.modifiedCount > 0;
+  }
+  async removeMembership(bookTitleId: string, membershipId: string): Promise<boolean> {
+    const result = await this.bookTitleModel.updateOne(
+      { _id: bookTitleId },
+      { $pull: { memberships: new Types.ObjectId(membershipId) } }
+    );
+    return result.modifiedCount > 0;
+  }
+  async updateBookTitle(id: string, updateBookTitleDto: any): Promise<BookTitle> {
+    const updatedBook = await this.bookTitleModel
+      .findByIdAndUpdate(id, updateBookTitleDto, { new: true, runValidators: true })
+      .exec();
 
+    if (!updatedBook) {
+      throw new NotFoundException(`Book with ID ${id} not found`);
+    }
+    return updatedBook;
+  }
 }

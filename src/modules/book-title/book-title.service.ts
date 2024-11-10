@@ -110,4 +110,13 @@ export class BookTitleService {
   async getAll(query  :Record<string, any>) {
     return this.bookTitleRepository.getAll(query);
   }
+  async removeCategory(bookTitleId: string, categoryId: string) {
+    return this.bookTitleRepository.removeCategory(bookTitleId, categoryId);
+  }
+  async removeMembership(bookTitleId: string, membershipId: string) {
+    return this.bookTitleRepository.removeMembership(bookTitleId, membershipId);
+  }
+  async findByIdAndUpdate(id: string, data: any) {
+    return this.bookTitleRepository.updateBookTitle(id, data);
+  }
 }
