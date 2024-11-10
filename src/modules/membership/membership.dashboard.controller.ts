@@ -10,6 +10,11 @@ export class MembershipDashboardController {
   async findAll(@Query() query) {
     return await this.membershipService.findMemberShip(query);
   }
+  @Get('get-all')
+  async getAll() {
+    return await this.membershipService.getAll();
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.membershipService.findOne(id);
@@ -18,5 +23,6 @@ export class MembershipDashboardController {
   async update(@Param('id') id: string, @Body() data: UpdateMembershipDto) {
     return await this.membershipService.update(id, data);
   }
+
 
 }

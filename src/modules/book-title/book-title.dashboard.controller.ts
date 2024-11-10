@@ -59,4 +59,18 @@ export class BookTitleDashboradController {
   ): Promise<BookTitle> {
     return this.bookTitleService.findByIdAndUpdate(id, updateBookTitleDto);
   }
+  @Put('update-categories/:id')
+  async updateCategories(
+    @Param('id') id: string,
+    @Body() categories: any,
+  ): Promise<BookTitle> {
+    return this.bookTitleService.updateCategories(id, categories);
+  }
+  @Put('update-memberships/:id')
+  async updateMemberships(
+    @Param('id') id: string,
+    @Body() memberships: any,
+  ): Promise<BookTitle> {
+    return this.bookTitleService.updateMemberships(id, memberships);
+  }
 }

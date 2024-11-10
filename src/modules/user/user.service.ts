@@ -66,4 +66,7 @@ export class UserService {
   async findAll() {
     return this.userRepository.findAll();
   }
+  async findAllUser(query) {
+    return this.userRepository.findAllUser(query);
+  }
 }

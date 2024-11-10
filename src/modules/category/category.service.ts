@@ -26,5 +26,8 @@ export class CategoryService {
   async update(id: string, category: CreateCategoryDto) {
     return this.categoryRepository.update(id, category);
   }
+  async getAll() {
+    return this.categoryRepository.findAll();
+  }
 
 }

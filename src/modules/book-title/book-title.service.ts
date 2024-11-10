@@ -119,4 +119,10 @@ export class BookTitleService {
   async findByIdAndUpdate(id: string, data: any) {
     return this.bookTitleRepository.updateBookTitle(id, data);
   }
+  async updateMemberships(id: string, memberships: any) {
+    return this.bookTitleRepository.updateMemberships(id, memberships);
+  }
+  async updateCategories(id: string, categories: any) {
+    return this.bookTitleRepository.updateCategories(id, categories);
+  }
 }

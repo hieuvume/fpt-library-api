@@ -43,4 +43,8 @@ export class MembershipService {
     }
     return this.membershipRepository.update(id, data);
   }
+  async getAll() {
+    return this.membershipRepository.getAll();
+  }
+  
 }

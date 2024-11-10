@@ -2,14 +2,14 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { BookRepository } from "modules/book/book.repository";
 import { Role } from "modules/role/role.schema";
-import { Model, ObjectId } from "mongoose";
+import { Model, ObjectId, PaginateModel } from "mongoose";
 import { User, UserDocument } from "./user.schema";
 import { MembershipCard } from "modules/membership-card/membership-card.schema";
 
 @Injectable()
 export class UserRepository {
   constructor(
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(User.name) private userModel: PaginateModel<UserDocument>,
     private readonly bookRepository: BookRepository
   ) {}
 
@@ -81,5 +81,18 @@ export class UserRepository {
   async count(conditions: any = {}) {
     return this.userModel.countDocuments(conditions).exec();
   }
+  async findAllUser(query: Record<string, any>) {
+    const { page, limit, sort, order, ...rest } = query;
+    const sortRecord: Record<string, any> = {};
+    sortRecord[sort] = order === "asc" ? 1 : -1;
+    return this.userModel.paginate(
+      {},
+      {
+        page,
+        limit,
+        sort: sortRecord,
+        populate:"role"
+      }
 
+ ) };
 }

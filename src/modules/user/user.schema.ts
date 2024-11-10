@@ -88,3 +88,4 @@ export class User {
 const UserSchema = SchemaFactory.createForClass(User);
 
 export { UserSchema };
+UserSchema.plugin(require("mongoose-paginate-v2"));

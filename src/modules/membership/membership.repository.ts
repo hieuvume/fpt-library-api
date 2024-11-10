@@ -47,5 +47,8 @@ export class MembershipRepository {
   async update(id: string, data: any): Promise<Membership> {
     return this.membershipModel.findByIdAndUpdate(id, data, { new: true }).exec();
   }
+  async getAll() {
+    return this.membershipModel.find().exec();
+  }
 
 }

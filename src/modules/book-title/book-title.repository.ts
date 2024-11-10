@@ -63,7 +63,7 @@ export class BookTitleRepository {
 
   async getBookDetails(id: string) {
     if (!Types.ObjectId.isValid(id)) {
-      throw new NotFoundException("Invalid book title id");
+      throw new NotFoundException("Invalid book title id hahaha");
     }
     const bookTitle = await this.bookTitleModel
       .findById(id)
@@ -179,4 +179,37 @@ export class BookTitleRepository {
     }
     return updatedBook;
   }
+  async updateMemberships(id: string, memberships: string[] | string): Promise<BookTitle> {
+    const membershipIds = Array.isArray(memberships) 
+        ? memberships.map((membershipId) => new Types.ObjectId(membershipId)) 
+        : [new Types.ObjectId(memberships)];
+
+    const updatedBook = await this.bookTitleModel.findByIdAndUpdate(
+        id,
+        {
+            $addToSet: {
+                memberships: { $each: membershipIds }
+            }
+        },
+        { new: true }
+    );
+    return updatedBook;
+}
+async updateCategories(id: string, categories: string[] | string): Promise<BookTitle> {
+  const categoryIds = Array.isArray(categories) 
+      ? categories.map((categoryId) => new Types.ObjectId(categoryId)) 
+      : [new Types.ObjectId(categories)];
+
+  const updatedBook = await this.bookTitleModel.findByIdAndUpdate(
+      id,
+      {
+          $addToSet: {
+              categories: { $each: categoryIds }
+          }
+      },
+      { new: true }
+  );
+
+  return updatedBook;
+}
 }

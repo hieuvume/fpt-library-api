@@ -7,7 +7,11 @@ export class UserDashboardController {
 
     @Get('')
     async list() {
-        return this.userService.findAll(); // Fetch all user
+        return this.userService.findAll(); 
+    }
+    @Get('list')
+    async listUsers(@Query() query) {
+        return this.userService.findAllUser(query);
     }
 
 }
