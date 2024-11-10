@@ -118,4 +118,9 @@ export class BookRepository {
       { new: true },
     ).exec();
   }
+
+  async count(conditions: any = {}) {
+    return this.bookModel.countDocuments(conditions).exec();
+  }
+
 }

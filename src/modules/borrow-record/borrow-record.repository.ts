@@ -356,4 +356,8 @@ export class BorrowRecordRepository {
   }
 
 
+  async count(conditions: any = {}) {
+    return this.borrowRecordModel.countDocuments(conditions).exec();
+  }
+
 }

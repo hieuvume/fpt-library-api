@@ -20,6 +20,7 @@ import { FeedbackModule } from "modules/feedback/feedback.module";
 import { PaymentModule } from "modules/payment/payment.module";
 import { ScheduleModule } from '@nestjs/schedule';
 import { NotificationModule } from "modules/notification/notification.module";
+import { DashboardModule } from "modules/dashboard/dashboard.module";
 
 @Module({
   imports: [
@@ -47,7 +48,8 @@ import { NotificationModule } from "modules/notification/notification.module";
     MembershipCardModule,
     FeedbackModule,
     PaymentModule,
-    NotificationModule
+    NotificationModule,
+    DashboardModule
   ],
   controllers: [AppController],
   providers: [AppService],

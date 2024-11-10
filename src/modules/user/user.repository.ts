@@ -76,4 +76,10 @@ export class UserRepository {
       .updateOne({ _id: userId }, { current_membership: membershipCard._id })
       .exec();
   }
+
+
+  async count(conditions: any = {}) {
+    return this.userModel.countDocuments(conditions).exec();
+  }
+
 }
