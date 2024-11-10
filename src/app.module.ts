@@ -18,9 +18,10 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { FeedbackModule } from "modules/feedback/feedback.module";
 import { PaymentModule } from "modules/payment/payment.module";
-import { ScheduleModule } from '@nestjs/schedule';
+import { ScheduleModule } from "@nestjs/schedule";
 import { NotificationModule } from "modules/notification/notification.module";
 import { DashboardModule } from "modules/dashboard/dashboard.module";
+import { BullModule } from "@nestjs/bull";
 
 @Module({
   imports: [
@@ -33,9 +34,15 @@ import { DashboardModule } from "modules/dashboard/dashboard.module";
       pass: "123456",
     }),
     ScheduleModule.forRoot(),
+    BullModule.forRoot({
+      redis: {
+        host: "localhost",
+        port: 6379,
+      },
+    }),
     MailModule,
     SettingModule,
-    BookModule, 
+    BookModule,
     CategoryModule,
     UserModule,
     AuthModule,
@@ -49,7 +56,7 @@ import { DashboardModule } from "modules/dashboard/dashboard.module";
     FeedbackModule,
     PaymentModule,
     NotificationModule,
-    DashboardModule
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],
